@@ -31,19 +31,24 @@ function Router() {
       <ProtectedRoute path="/profile" component={ProfilePage} />
       <ProtectedRoute path="/membership" component={MembershipPage} />
       <ProtectedRoute path="/watchlist" component={WatchlistPage} />
-      <ProtectedRoute path="/watchlist/manage" component={ManageWatchlistsPage} />
+      <ProtectedRoute
+        path="/watchlist/manage"
+        component={ManageWatchlistsPage}
+      />
       <ProtectedRoute path="/market" component={MarketPage} />
       <ProtectedRoute path="/news" component={NewsPage} />
       <ProtectedRoute path="/stocks/:symbol" component={StockDetailPage} />
       <ProtectedRoute path="/activities" component={ActivitiesPage} />
-      
       {/* Forum routes */}
       <ProtectedRoute path="/forum" component={EnhancedForumCategoriesPage} />
-      <ProtectedRoute path="/forum/categories" component={EnhancedForumCategoriesPage} />
+      <ProtectedRoute
+        path="/forum/categories"
+        component={EnhancedForumCategoriesPage}
+      />
       <ProtectedRoute path="/forum/category/:id" component={ForumTopicsPage} />
       <ProtectedRoute path="/forum/topic/:id" component={ForumTopicPage} />
       <ProtectedRoute path="/forum/my-posts" component={MyPostsPage} />
-      
+
       {/* Public routes */}
       <Route path="/auth" component={AuthPage} />
       <Route path="/about" component={AboutPage} />
