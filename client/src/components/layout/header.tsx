@@ -85,6 +85,9 @@ const Header = () => {
               <Link href="/news" className={`py-2 px-1 font-medium ${isActive('/news') ? 'tab-active text-primary border-b-2 border-primary' : 'hover:text-primary'}`}>
                 News
               </Link>
+              <Link href="/forum" className={`py-2 px-1 font-medium ${isActive('/forum') ? 'tab-active text-primary border-b-2 border-primary' : 'hover:text-primary'}`}>
+                Forum
+              </Link>
             </nav>
           </div>
           
@@ -141,6 +144,9 @@ const Header = () => {
               </Link>
               <Link href="/news" className={`py-2 px-4 rounded-md ${isActive('/news') ? 'bg-primary bg-opacity-10 text-primary' : 'hover:bg-gray-100'}`}>
                 News
+              </Link>
+              <Link href="/forum" className={`py-2 px-4 rounded-md ${isActive('/forum') ? 'bg-primary bg-opacity-10 text-primary' : 'hover:bg-gray-100'}`}>
+                Forum
               </Link>
             </nav>
           </div>

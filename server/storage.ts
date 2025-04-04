@@ -1,4 +1,9 @@
-import { users, type User, type InsertUser, type UserPreferences, type Watchlist, type WatchlistItem, type SearchHistory } from "@shared/schema";
+import { users, type User, type InsertUser, type UserPreferences, type Watchlist, 
+  type WatchlistItem, type SearchHistory, type ForumCategory, type ForumTopic, 
+  type ForumReply, type InsertForumCategory, type InsertForumTopic, type InsertForumReply,
+  UserModel, UserPreferencesModel, WatchlistModel, WatchlistItemModel, SearchHistoryModel,
+  ForumCategoryModel, ForumTopicModel, ForumReplyModel 
+} from "@shared/schema";
 import session from "express-session";
 import createMemoryStore from "memorystore";
 import mongoose from 'mongoose';
@@ -30,8 +35,21 @@ export interface IStorage {
   addSearchHistory(userId: number, symbol: string): Promise<SearchHistory>;
   getSearchHistory(userId: number, limit?: number): Promise<SearchHistory[]>;
   
+  // Forum operations
+  getForumCategories(): Promise<ForumCategory[]>;
+  getForumCategory(id: number): Promise<ForumCategory | undefined>;
+  createForumCategory(category: InsertForumCategory): Promise<ForumCategory>;
+  
+  getForumTopics(categoryId: number, page?: number, limit?: number): Promise<ForumTopic[]>;
+  getForumTopic(id: number): Promise<ForumTopic | undefined>;
+  createForumTopic(topic: InsertForumTopic): Promise<ForumTopic>;
+  incrementTopicViews(topicId: number): Promise<void>;
+  
+  getForumReplies(topicId: number, page?: number, limit?: number): Promise<ForumReply[]>;
+  createForumReply(reply: InsertForumReply): Promise<ForumReply>;
+  
   // Session store
-  sessionStore: session.SessionStore;
+  sessionStore: any; // Using any since the express-session types are not properly exported
 }
 
 export class MemStorage implements IStorage {
@@ -40,27 +58,176 @@ export class MemStorage implements IStorage {
   private watchlists: Map<number, Watchlist>;
   private watchlistItems: Map<number, WatchlistItem>;
   private searchHistory: Map<number, SearchHistory>;
-  sessionStore: session.SessionStore;
+  sessionStore: any; // Using any since express-session types are not properly exported
   currentUserId: number;
   currentPreferencesId: number;
   currentWatchlistId: number;
   currentWatchlistItemId: number;
   currentSearchHistoryId: number;
 
+  private forumCategories: Map<number, ForumCategory>;
+  private forumTopics: Map<number, ForumTopic>;
+  private forumReplies: Map<number, ForumReply>;
+  currentForumCategoryId: number;
+  currentForumTopicId: number;
+  currentForumReplyId: number;
+  
   constructor() {
     this.users = new Map();
     this.userPreferences = new Map();
     this.watchlists = new Map();
     this.watchlistItems = new Map();
     this.searchHistory = new Map();
+    this.forumCategories = new Map();
+    this.forumTopics = new Map();
+    this.forumReplies = new Map();
+    
     this.currentUserId = 1;
     this.currentPreferencesId = 1;
     this.currentWatchlistId = 1;
     this.currentWatchlistItemId = 1;
     this.currentSearchHistoryId = 1;
+    this.currentForumCategoryId = 1;
+    this.currentForumTopicId = 1;
+    this.currentForumReplyId = 1;
+    
     this.sessionStore = new MemoryStore({
       checkPeriod: 86400000
     });
+    
+    // Initialize forum data
+    this.initForumData();
+  }
+  
+  // Initialize forum data with sample content
+  private initForumData() {
+    // Create default forum categories
+    const markets = this.createForumCategoryInternal({
+      name: "Market Analysis",
+      description: "Discuss stock market trends and analysis techniques",
+      order: 1
+    });
+    
+    const economics = this.createForumCategoryInternal({
+      name: "Economics & Global Markets",
+      description: "Discussions about economics and global market impacts",
+      order: 2
+    });
+    
+    const news = this.createForumCategoryInternal({
+      name: "Financial News",
+      description: "Talk about the latest financial news and events",
+      order: 3
+    });
+    
+    const strategies = this.createForumCategoryInternal({
+      name: "Trading Strategies",
+      description: "Share and discuss trading strategies and approaches",
+      order: 4
+    });
+    
+    const tech = this.createForumCategoryInternal({
+      name: "Technology Stocks",
+      description: "Focused discussions on technology sector stocks",
+      order: 5
+    });
+
+    // Create sample topics for the market analysis category
+    const topic1 = this.createForumTopicInternal({
+      categoryId: markets.id,
+      userId: 1,
+      title: "S&P 500 Technical Analysis - April 2025",
+      content: "I've been analyzing the S&P 500 chart patterns for April 2025 and noticed some interesting trends. The market seems to be forming a strong support level at 5,800. What are your thoughts on potential resistance levels for the coming weeks?",
+      views: 42,
+      isPinned: true,
+      isLocked: false,
+      lastReplyAt: new Date(),
+      createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000) // 3 days ago
+    });
+    
+    const topic2 = this.createForumTopicInternal({
+      categoryId: tech.id,
+      userId: 1,
+      title: "AI Companies Growth Potential",
+      content: "I'm looking at several AI-focused companies that have shown strong growth over the past year. Companies like NVIDIA, Microsoft, and Google have made significant investments in AI. Which AI stocks do you think have the biggest growth potential for the next 5 years?",
+      views: 28,
+      isPinned: false,
+      isLocked: false,
+      lastReplyAt: new Date(Date.now() - 12 * 60 * 60 * 1000), // 12 hours ago
+      createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000) // 5 days ago
+    });
+
+    // Add some sample replies
+    this.createForumReplyInternal({
+      topicId: topic1.id,
+      userId: 1,
+      content: "Great analysis! I think we might see resistance at 6,000 based on previous patterns. The market has been quite bullish lately despite economic uncertainties.",
+      isEdited: false,
+      createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
+      editedAt: undefined
+    });
+    
+    this.createForumReplyInternal({
+      topicId: topic1.id,
+      userId: 1,
+      content: "I've been tracking moving averages and we're well above the 200-day MA, which suggests continued upward momentum. However, I'm keeping an eye on the MACD for any signs of divergence.",
+      isEdited: false,
+      createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000), // 1 day ago
+      editedAt: undefined
+    });
+  }
+  
+  private createForumCategoryInternal(data: Partial<ForumCategory>): ForumCategory {
+    const id = this.currentForumCategoryId++;
+    const category: ForumCategory = {
+      id,
+      name: data.name || "Unnamed Category",
+      description: data.description,
+      order: data.order || 0,
+      createdAt: new Date()
+    };
+    this.forumCategories.set(id, category);
+    return category;
+  }
+  
+  private createForumTopicInternal(data: Partial<ForumTopic>): ForumTopic {
+    const id = this.currentForumTopicId++;
+    const topic: ForumTopic = {
+      id,
+      categoryId: data.categoryId || 1,
+      userId: data.userId || 1,
+      title: data.title || "Unnamed Topic",
+      content: data.content || "",
+      views: data.views || 0,
+      isPinned: data.isPinned || false,
+      isLocked: data.isLocked || false,
+      lastReplyAt: data.lastReplyAt || new Date(),
+      createdAt: data.createdAt || new Date()
+    };
+    this.forumTopics.set(id, topic);
+    return topic;
+  }
+  
+  private createForumReplyInternal(data: Partial<ForumReply>): ForumReply {
+    const id = this.currentForumReplyId++;
+    const reply: ForumReply = {
+      id,
+      topicId: data.topicId || 1,
+      userId: data.userId || 1,
+      content: data.content || "",
+      isEdited: data.isEdited || false,
+      createdAt: data.createdAt || new Date(),
+      editedAt: data.editedAt
+    };
+    this.forumReplies.set(id, reply);
+    
+    // Update the lastReplyAt for the topic
+    const topic = this.forumTopics.get(reply.topicId);
+    if (topic) {
+      topic.lastReplyAt = reply.createdAt;
+    }
+    
+    return reply;
   }
 
   // User operations
@@ -81,9 +248,9 @@ export class MemStorage implements IStorage {
       ...insertUser, 
       id, 
       membershipType: "Basic",
-      avatar: null,
-      stripeCustomerId: null,
-      stripeSubscriptionId: null,
+      avatar: undefined,
+      stripeCustomerId: undefined,
+      stripeSubscriptionId: undefined,
       createdAt: now
     };
     this.users.set(id, user);
@@ -236,6 +403,76 @@ export class MemStorage implements IStorage {
     
     return history;
   }
+  
+  // Forum operations
+  async getForumCategories(): Promise<ForumCategory[]> {
+    return Array.from(this.forumCategories.values())
+      .sort((a, b) => a.order - b.order);
+  }
+  
+  async getForumCategory(id: number): Promise<ForumCategory | undefined> {
+    return this.forumCategories.get(id);
+  }
+  
+  async createForumCategory(category: InsertForumCategory): Promise<ForumCategory> {
+    return this.createForumCategoryInternal(category);
+  }
+  
+  async getForumTopics(categoryId: number, page = 1, limit = 20): Promise<ForumTopic[]> {
+    const topics = Array.from(this.forumTopics.values())
+      .filter(topic => topic.categoryId === categoryId)
+      .sort((a, b) => {
+        // Pinned topics first
+        if (a.isPinned && !b.isPinned) return -1;
+        if (!a.isPinned && b.isPinned) return 1;
+        
+        // Then sort by most recent activity
+        return b.lastReplyAt.getTime() - a.lastReplyAt.getTime();
+      });
+    
+    const start = (page - 1) * limit;
+    const end = start + limit;
+    
+    return topics.slice(start, end);
+  }
+  
+  async getForumTopic(id: number): Promise<ForumTopic | undefined> {
+    return this.forumTopics.get(id);
+  }
+  
+  async createForumTopic(topic: InsertForumTopic): Promise<ForumTopic> {
+    const newTopic: Partial<ForumTopic> = {
+      ...topic,
+      views: 0,
+      isPinned: false,
+      isLocked: false,
+      lastReplyAt: new Date()
+    };
+    
+    return this.createForumTopicInternal(newTopic);
+  }
+  
+  async incrementTopicViews(topicId: number): Promise<void> {
+    const topic = this.forumTopics.get(topicId);
+    if (topic) {
+      topic.views++;
+    }
+  }
+  
+  async getForumReplies(topicId: number, page = 1, limit = 20): Promise<ForumReply[]> {
+    const replies = Array.from(this.forumReplies.values())
+      .filter(reply => reply.topicId === topicId)
+      .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+    
+    const start = (page - 1) * limit;
+    const end = start + limit;
+    
+    return replies.slice(start, end);
+  }
+  
+  async createForumReply(reply: InsertForumReply): Promise<ForumReply> {
+    return this.createForumReplyInternal(reply);
+  }
 }
 
 // MongoDB Models
@@ -280,19 +517,10 @@ const searchHistorySchema = new mongoose.Schema({
   timestamp: { type: Date, default: Date.now }
 });
 
-// Define models (only if they haven't been compiled)
-const UserModel = mongoose.models.User || mongoose.model('User', userSchema);
-const UserPreferencesModel = mongoose.models.UserPreferences || 
-                             mongoose.model('UserPreferences', userPreferencesSchema);
-const WatchlistModel = mongoose.models.Watchlist || 
-                       mongoose.model('Watchlist', watchlistSchema);
-const WatchlistItemModel = mongoose.models.WatchlistItem || 
-                          mongoose.model('WatchlistItem', watchlistItemSchema);
-const SearchHistoryModel = mongoose.models.SearchHistory || 
-                          mongoose.model('SearchHistory', searchHistorySchema);
+// We're using models from shared/schema.ts instead of defining them here
 
 export class MongoDBStorage implements IStorage {
-  sessionStore: session.SessionStore;
+  sessionStore: any; // Using any since express-session types are not properly exported
   private mongoClient: MongoClient | null = null;
   private isConnected = false;
   
@@ -379,9 +607,9 @@ export class MongoDBStorage implements IStorage {
         id: nextId,
         ...insertUser,
         membershipType: "Basic",
-        avatar: null,
-        stripeCustomerId: null,
-        stripeSubscriptionId: null,
+        avatar: undefined,
+        stripeCustomerId: undefined,
+        stripeSubscriptionId: undefined,
         createdAt: now
       });
       
@@ -408,9 +636,9 @@ export class MongoDBStorage implements IStorage {
         password: insertUser.password,
         email: insertUser.email || '',
         membershipType: "Basic",
-        avatar: null,
-        stripeCustomerId: null,
-        stripeSubscriptionId: null,
+        avatar: undefined,
+        stripeCustomerId: undefined,
+        stripeSubscriptionId: undefined,
         createdAt: now
       };
     } catch (error) {
@@ -728,6 +956,244 @@ export class MongoDBStorage implements IStorage {
     } catch (error) {
       console.error('Error fetching search history:', error);
       return [];
+    }
+  }
+  
+  // Forum operations
+  async getForumCategories(): Promise<ForumCategory[]> {
+    try {
+      await this.connect();
+      const categories = await ForumCategoryModel.find().sort('order');
+      
+      return categories.map(cat => ({
+        id: cat.id,
+        name: cat.name,
+        description: cat.description,
+        order: cat.order,
+        createdAt: cat.createdAt
+      }));
+    } catch (error) {
+      console.error('Error fetching forum categories:', error);
+      return [];
+    }
+  }
+  
+  async getForumCategory(id: number): Promise<ForumCategory | undefined> {
+    try {
+      await this.connect();
+      const category = await ForumCategoryModel.findOne({ id });
+      if (!category) return undefined;
+      
+      return {
+        id: category.id,
+        name: category.name,
+        description: category.description,
+        order: category.order,
+        createdAt: category.createdAt
+      };
+    } catch (error) {
+      console.error('Error fetching forum category:', error);
+      return undefined;
+    }
+  }
+  
+  async createForumCategory(categoryData: InsertForumCategory): Promise<ForumCategory> {
+    try {
+      await this.connect();
+      // Get highest ID or start with 1
+      const highestCategory = await ForumCategoryModel.findOne().sort('-id');
+      const nextId = highestCategory ? highestCategory.id + 1 : 1;
+      
+      const now = new Date();
+      const newCategory = new ForumCategoryModel({
+        id: nextId,
+        name: categoryData.name,
+        description: categoryData.description || '',
+        order: categoryData.order || 0,
+        createdAt: now
+      });
+      
+      await newCategory.save();
+      
+      return {
+        id: nextId,
+        name: categoryData.name,
+        description: categoryData.description,
+        order: categoryData.order || 0,
+        createdAt: now
+      };
+    } catch (error) {
+      console.error('Error creating forum category:', error);
+      throw error;
+    }
+  }
+  
+  async getForumTopics(categoryId: number, page = 1, limit = 20): Promise<ForumTopic[]> {
+    try {
+      await this.connect();
+      const skip = (page - 1) * limit;
+      
+      const topics = await ForumTopicModel.find({ categoryId })
+        .sort({ isPinned: -1, lastReplyAt: -1 })
+        .skip(skip)
+        .limit(limit);
+      
+      return topics.map(topic => ({
+        id: topic.id,
+        categoryId: topic.categoryId,
+        userId: topic.userId,
+        title: topic.title,
+        content: topic.content,
+        views: topic.views,
+        isPinned: topic.isPinned,
+        isLocked: topic.isLocked,
+        lastReplyAt: topic.lastReplyAt,
+        createdAt: topic.createdAt
+      }));
+    } catch (error) {
+      console.error('Error fetching forum topics:', error);
+      return [];
+    }
+  }
+  
+  async getForumTopic(id: number): Promise<ForumTopic | undefined> {
+    try {
+      await this.connect();
+      const topic = await ForumTopicModel.findOne({ id });
+      if (!topic) return undefined;
+      
+      return {
+        id: topic.id,
+        categoryId: topic.categoryId,
+        userId: topic.userId,
+        title: topic.title,
+        content: topic.content,
+        views: topic.views,
+        isPinned: topic.isPinned,
+        isLocked: topic.isLocked,
+        lastReplyAt: topic.lastReplyAt,
+        createdAt: topic.createdAt
+      };
+    } catch (error) {
+      console.error('Error fetching forum topic:', error);
+      return undefined;
+    }
+  }
+  
+  async createForumTopic(topicData: InsertForumTopic): Promise<ForumTopic> {
+    try {
+      await this.connect();
+      // Get highest ID or start with 1
+      const highestTopic = await ForumTopicModel.findOne().sort('-id');
+      const nextId = highestTopic ? highestTopic.id + 1 : 1;
+      
+      const now = new Date();
+      const newTopic = new ForumTopicModel({
+        id: nextId,
+        categoryId: topicData.categoryId,
+        userId: topicData.userId,
+        title: topicData.title,
+        content: topicData.content,
+        views: 0,
+        isPinned: false,
+        isLocked: false,
+        lastReplyAt: now,
+        createdAt: now
+      });
+      
+      await newTopic.save();
+      
+      return {
+        id: nextId,
+        categoryId: topicData.categoryId,
+        userId: topicData.userId,
+        title: topicData.title,
+        content: topicData.content,
+        views: 0,
+        isPinned: false,
+        isLocked: false,
+        lastReplyAt: now,
+        createdAt: now
+      };
+    } catch (error) {
+      console.error('Error creating forum topic:', error);
+      throw error;
+    }
+  }
+  
+  async incrementTopicViews(topicId: number): Promise<void> {
+    try {
+      await this.connect();
+      await ForumTopicModel.updateOne(
+        { id: topicId },
+        { $inc: { views: 1 } }
+      );
+    } catch (error) {
+      console.error('Error incrementing topic views:', error);
+    }
+  }
+  
+  async getForumReplies(topicId: number, page = 1, limit = 20): Promise<ForumReply[]> {
+    try {
+      await this.connect();
+      const skip = (page - 1) * limit;
+      
+      const replies = await ForumReplyModel.find({ topicId })
+        .sort('createdAt')
+        .skip(skip)
+        .limit(limit);
+      
+      return replies.map(reply => ({
+        id: reply.id,
+        topicId: reply.topicId,
+        userId: reply.userId,
+        content: reply.content,
+        isEdited: reply.isEdited,
+        createdAt: reply.createdAt,
+        editedAt: reply.editedAt
+      }));
+    } catch (error) {
+      console.error('Error fetching forum replies:', error);
+      return [];
+    }
+  }
+  
+  async createForumReply(replyData: InsertForumReply): Promise<ForumReply> {
+    try {
+      await this.connect();
+      // Get highest ID or start with 1
+      const highestReply = await ForumReplyModel.findOne().sort('-id');
+      const nextId = highestReply ? highestReply.id + 1 : 1;
+      
+      const now = new Date();
+      const newReply = new ForumReplyModel({
+        id: nextId,
+        topicId: replyData.topicId,
+        userId: replyData.userId,
+        content: replyData.content,
+        isEdited: false,
+        createdAt: now
+      });
+      
+      await newReply.save();
+      
+      // Update lastReplyAt in the topic
+      await ForumTopicModel.updateOne(
+        { id: replyData.topicId },
+        { $set: { lastReplyAt: now } }
+      );
+      
+      return {
+        id: nextId,
+        topicId: replyData.topicId,
+        userId: replyData.userId,
+        content: replyData.content,
+        isEdited: false,
+        createdAt: now
+      };
+    } catch (error) {
+      console.error('Error creating forum reply:', error);
+      throw error;
     }
   }
 }

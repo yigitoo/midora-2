@@ -11,29 +11,29 @@
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 220 91% 36%;
+    --primary: 215 90% 52%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 152 55% 46%;
+    --secondary: 152 55% 42%;
     --secondary-foreground: 0 0% 100%;
     --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 359 86% 60%;
+    --muted-foreground: 215.4 30% 40%;
+    --accent: 359 85% 55%;
     --accent-foreground: 0 0% 100%;
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 84.2% 55%;
     --destructive-foreground: 0 0% 100%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 220 91% 36%;
+    --border: 214.3 31.8% 80%;
+    --input: 214.3 31.8% 85%;
+    --ring: 215 90% 52%;
     --radius: 0.5rem;
     
     /* Midora custom colors for light theme */
     --up-color: 142 76% 36%;
-    --down-color: 0 84% 60%;
-    --chart-line: 220 91% 36%;
-    --hover-bg: 210 40% 96.1%;
+    --down-color: 0 84% 55%;
+    --chart-line: 215 90% 52%;
+    --hover-bg: 210 40% 94%;
     --text-dark: 222.2 84% 4.9%;
     --text-light: 210 40% 98%;
-    --text-muted: 215.4 16.3% 46.9%;
+    --text-muted: 215.4 30% 40%;
   }
 
   .dark {
@@ -44,28 +44,28 @@
     --card-foreground: 210 40% 98%;
     --popover: 222.2 47% 13%;
     --popover-foreground: 210 40% 98%;
-    --primary: 220 91% 54%;
+    --primary: 215 90% 60%;
     --primary-foreground: 0 0% 100%;
     --secondary: 152 55% 50%;
     --secondary-foreground: 0 0% 100%;
     --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 75.1%;
+    --muted-foreground: 215 20.2% 80%;
     --accent: 359 86% 65%;
     --accent-foreground: 0 0% 100%;
-    --destructive: 0 74.2% 50.2%;
+    --destructive: 0 74.2% 55%;
     --destructive-foreground: 0 0% 100%;
-    --border: 217.2 32.6% 20.5%;
-    --input: 217.2 32.6% 20.5%;
-    --ring: 220 91% 54%;
+    --border: 217.2 32.6% 25%;
+    --input: 217.2 32.6% 25%;
+    --ring: 215 90% 60%;
     
     /* Midora custom colors for dark theme */
     --up-color: 142 76% 45%;
     --down-color: 0 84% 65%;
-    --chart-line: 220 91% 65%;
+    --chart-line: 215 90% 70%;
     --hover-bg: 217.2 32.6% 22.5%;
     --text-dark: 210 40% 98%;
-    --text-light: 220 91% 54%;
-    --text-muted: 215 20.2% 75.1%;
+    --text-light: 215 90% 60%;
+    --text-muted: 215 20.2% 80%;
   }
 
   * {

@@ -5,7 +5,12 @@ import { setupAuth } from "./auth";
 import { generateCsv } from "./csv-export";
 import yahooFinance from "yahoo-finance2";
 import { ZodError } from "zod";
-import { insertWatchlistItemSchema } from "@shared/schema";
+import { 
+  insertWatchlistItemSchema, 
+  insertForumCategorySchema, 
+  insertForumTopicSchema, 
+  insertForumReplySchema 
+} from "@shared/schema";
 import { WebSocketServer, WebSocket } from "ws";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -566,6 +571,145 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error('Error updating stock data:', error);
     }
   }, updateInterval);
+  
+  // Forum routes
+  app.get("/api/forum/categories", async (req, res) => {
+    try {
+      const categories = await storage.getForumCategories();
+      res.json(categories);
+    } catch (error) {
+      console.error("Error fetching forum categories:", error);
+      res.status(500).json({ message: "Failed to fetch forum categories" });
+    }
+  });
+  
+  app.get("/api/forum/categories/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const category = await storage.getForumCategory(Number(id));
+      
+      if (!category) {
+        return res.status(404).json({ message: "Forum category not found" });
+      }
+      
+      res.json(category);
+    } catch (error) {
+      console.error("Error fetching forum category:", error);
+      res.status(500).json({ message: "Failed to fetch forum category" });
+    }
+  });
+  
+  app.post("/api/forum/categories", async (req, res) => {
+    try {
+      // Only admin can create categories
+      if (!req.isAuthenticated() || req.user.membershipType !== "Pro") {
+        return res.status(403).json({ message: "Only Pro members can create forum categories" });
+      }
+      
+      const validatedData = insertForumCategorySchema.parse(req.body);
+      const category = await storage.createForumCategory(validatedData);
+      res.status(201).json(category);
+    } catch (error) {
+      console.error("Error creating forum category:", error);
+      if (error instanceof ZodError) {
+        return res.status(400).json({ message: "Invalid input", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to create forum category" });
+    }
+  });
+  
+  app.get("/api/forum/topics", async (req, res) => {
+    try {
+      const categoryId = Number(req.query.categoryId);
+      const page = Number(req.query.page) || 1;
+      const limit = Number(req.query.limit) || 20;
+      
+      if (!categoryId) {
+        return res.status(400).json({ message: "Category ID is required" });
+      }
+      
+      const topics = await storage.getForumTopics(categoryId, page, limit);
+      res.json(topics);
+    } catch (error) {
+      console.error("Error fetching forum topics:", error);
+      res.status(500).json({ message: "Failed to fetch forum topics" });
+    }
+  });
+  
+  app.get("/api/forum/topics/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const topic = await storage.getForumTopic(Number(id));
+      
+      if (!topic) {
+        return res.status(404).json({ message: "Forum topic not found" });
+      }
+      
+      // Increment view count
+      await storage.incrementTopicViews(Number(id));
+      
+      res.json(topic);
+    } catch (error) {
+      console.error("Error fetching forum topic:", error);
+      res.status(500).json({ message: "Failed to fetch forum topic" });
+    }
+  });
+  
+  app.post("/api/forum/topics", async (req, res) => {
+    try {
+      if (!req.isAuthenticated()) {
+        return res.status(401).json({ message: "You must be logged in to create a topic" });
+      }
+      
+      const topicData = { ...req.body, userId: req.user.id };
+      const validatedData = insertForumTopicSchema.parse(topicData);
+      const topic = await storage.createForumTopic(validatedData);
+      res.status(201).json(topic);
+    } catch (error) {
+      console.error("Error creating forum topic:", error);
+      if (error instanceof ZodError) {
+        return res.status(400).json({ message: "Invalid input", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to create forum topic" });
+    }
+  });
+  
+  app.get("/api/forum/replies", async (req, res) => {
+    try {
+      const topicId = Number(req.query.topicId);
+      const page = Number(req.query.page) || 1;
+      const limit = Number(req.query.limit) || 20;
+      
+      if (!topicId) {
+        return res.status(400).json({ message: "Topic ID is required" });
+      }
+      
+      const replies = await storage.getForumReplies(topicId, page, limit);
+      res.json(replies);
+    } catch (error) {
+      console.error("Error fetching forum replies:", error);
+      res.status(500).json({ message: "Failed to fetch forum replies" });
+    }
+  });
+  
+  app.post("/api/forum/replies", async (req, res) => {
+    try {
+      if (!req.isAuthenticated()) {
+        return res.status(401).json({ message: "You must be logged in to reply" });
+      }
+      
+      const replyData = { ...req.body, userId: req.user.id };
+      const validatedData = insertForumReplySchema.parse(replyData);
+      const reply = await storage.createForumReply(validatedData);
+      res.status(201).json(reply);
+    } catch (error) {
+      console.error("Error creating forum reply:", error);
+      if (error instanceof ZodError) {
+        return res.status(400).json({ message: "Invalid input", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to create forum reply" });
+    }
+  });
   
   return httpServer;
 }

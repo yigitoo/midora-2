@@ -10,6 +10,10 @@ import MembershipPage from "@/pages/membership-page";
 import WatchlistPage from "@/pages/watchlist-page";
 import MarketPage from "@/pages/market-page";
 import NewsPage from "@/pages/news-page";
+// Forum pages
+import ForumCategoriesPage from "./pages/forum/categories-page";
+import ForumTopicsPage from "./pages/forum/topics-page";
+import ForumTopicPage from "./pages/forum/topic-page";
 import { AuthProvider } from "@/hooks/use-auth";
 import { ThemeProvider } from "@/hooks/use-theme";
 import { ProtectedRoute } from "@/lib/protected-route";
@@ -23,6 +27,9 @@ function Router() {
       <ProtectedRoute path="/watchlist" component={WatchlistPage} />
       <ProtectedRoute path="/market" component={MarketPage} />
       <ProtectedRoute path="/news" component={NewsPage} />
+      <ProtectedRoute path="/forum" component={ForumCategoriesPage} />
+      <ProtectedRoute path="/forum/category/:id" component={ForumTopicsPage} />
+      <ProtectedRoute path="/forum/topic/:id" component={ForumTopicPage} />
       <Route path="/auth" component={AuthPage} />
       <Route component={NotFound} />
     </Switch>
