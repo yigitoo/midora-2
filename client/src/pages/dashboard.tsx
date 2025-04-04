@@ -5,8 +5,10 @@ import MarketOverview from "@/components/dashboard/market-overview";
 import StockDetail from "@/components/dashboard/stock-detail";
 import RecentActivity from "@/components/dashboard/recent-activity";
 import Watchlist from "@/components/dashboard/watchlist";
+import { LiveStockTicker } from "@/components/stock/live-stock-ticker";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -124,10 +126,15 @@ const Dashboard = () => {
         {/* Stock Detail */}
         <StockDetail symbol={selectedStock} />
         
-        {/* Recent Activity & Watchlist */}
+        {/* Recent Activity, Live Ticker & Watchlist */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="md:col-span-1">
+          <div className="md:col-span-1 space-y-6">
             <RecentActivity />
+            <LiveStockTicker 
+              symbols={["AAPL", "MSFT", "GOOGL", "AMZN", "META"]}
+              title="Live Updates"
+              onSelectStock={handleStockSelected}
+            />
           </div>
           
           <div className="md:col-span-2">

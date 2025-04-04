@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useLocation } from "wouter";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -75,7 +75,7 @@ const ProfilePage = () => {
   });
   
   // Update form values when preferences are loaded
-  React.useEffect(() => {
+  useEffect(() => {
     if (preferences) {
       preferencesForm.reset({
         emailNotifications: preferences.emailNotifications,

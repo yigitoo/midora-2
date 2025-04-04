@@ -6,6 +6,7 @@ import { generateCsv } from "./csv-export";
 import yahooFinance from "yahoo-finance2";
 import { ZodError } from "zod";
 import { insertWatchlistItemSchema } from "@shared/schema";
+import { WebSocketServer, WebSocket } from "ws";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Set up authentication routes (/api/register, /api/login, etc.)
@@ -33,16 +34,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/stocks/:symbol/history", async (req, res) => {
     try {
       const { symbol } = req.params;
-      const { period = "1d", interval = "5m" } = req.query;
+      const period = req.query.period as string || "1d";
+      
+      // YahooFinance only accepts 1d, 1wk, or 1mo for interval
+      let interval: "1d" | "1wk" | "1mo" = "1d";
+      if (req.query.interval === "1wk" || req.query.interval === "1mo") {
+        interval = req.query.interval;
+      }
       
       const queryOptions = {
         period1: period === "1d" ? "1d" : undefined,
         period2: undefined,
-        interval: interval as string
+        interval
       };
       
       const result = await yahooFinance.historical(symbol, queryOptions);
-      res.json(result);
+      
+      // Convert Date objects to ISO strings for JSON serialization
+      const formattedResult = result.map(item => ({
+        ...item,
+        date: item.date.toISOString()
+      }));
+      
+      res.json(formattedResult);
     } catch (error) {
       console.error("Error fetching historical data:", error);
       res.status(500).json({ message: "Failed to fetch historical data" });
@@ -215,8 +229,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         period1: period as string
       });
       
+      // Convert Date objects to ISO strings for CSV generation
+      const formattedData = stockData.map(item => ({
+        ...item,
+        date: item.date.toISOString().split('T')[0]  // Format as YYYY-MM-DD
+      }));
+      
       // Generate CSV
-      const csv = generateCsv(stockData);
+      const csv = generateCsv(formattedData);
       
       // Set headers for CSV download
       res.setHeader("Content-Type", "text/csv");
@@ -327,5 +347,139 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   const httpServer = createServer(app);
+  
+  // Set up WebSocket server for real-time stock updates
+  const wss = new WebSocketServer({ server: httpServer, path: '/ws' });
+  
+  // Keep track of subscribed symbols and associated clients
+  const subscriptions: Map<string, Set<WebSocket>> = new Map();
+  
+  wss.on('connection', (ws) => {
+    console.log('WebSocket client connected');
+    
+    // Handle subscription messages from client
+    ws.on('message', async (message) => {
+      try {
+        const data = JSON.parse(message.toString());
+        
+        if (data.type === 'subscribe') {
+          // Subscribe to symbol
+          const symbol = data.symbol.toUpperCase();
+          
+          if (!subscriptions.has(symbol)) {
+            subscriptions.set(symbol, new Set());
+          }
+          
+          subscriptions.get(symbol)?.add(ws);
+          
+          // Send initial data
+          try {
+            const quote = await yahooFinance.quote(symbol);
+            if (ws.readyState === WebSocket.OPEN) {
+              ws.send(JSON.stringify({
+                type: 'quote',
+                symbol,
+                data: quote
+              }));
+            }
+          } catch (error) {
+            console.error(`Error fetching initial data for ${symbol}:`, error);
+          }
+          
+          console.log(`Client subscribed to ${symbol}`);
+        } else if (data.type === 'unsubscribe') {
+          // Unsubscribe from symbol
+          const symbol = data.symbol.toUpperCase();
+          
+          if (subscriptions.has(symbol)) {
+            subscriptions.get(symbol)?.delete(ws);
+            
+            // Clean up if no more subscribers
+            if (subscriptions.get(symbol)?.size === 0) {
+              subscriptions.delete(symbol);
+            }
+          }
+          
+          console.log(`Client unsubscribed from ${symbol}`);
+        }
+      } catch (error) {
+        console.error('Error processing WebSocket message:', error);
+      }
+    });
+    
+    // Handle client disconnect
+    ws.on('close', () => {
+      console.log('WebSocket client disconnected');
+      
+      // Remove client from all subscriptions
+      for (const [symbol, clients] of subscriptions.entries()) {
+        clients.delete(ws);
+        
+        // Clean up if no more subscribers
+        if (clients.size === 0) {
+          subscriptions.delete(symbol);
+        }
+      }
+    });
+  });
+  
+  // Start periodic updates for subscribed symbols (every 5 seconds)
+  const updateInterval = 5000; // 5 seconds
+  
+  setInterval(async () => {
+    // Skip if no subscriptions
+    if (subscriptions.size === 0) return;
+    
+    // Get all subscribed symbols
+    const symbols = Array.from(subscriptions.keys());
+    
+    try {
+      // Fetch latest quotes for all subscribed symbols
+      const quotes = await Promise.all(
+        symbols.map(async (symbol) => {
+          try {
+            return {
+              symbol,
+              data: await yahooFinance.quote(symbol),
+              error: null
+            };
+          } catch (error) {
+            console.error(`Error fetching update for ${symbol}:`, error);
+            return {
+              symbol,
+              data: null,
+              error: 'Failed to fetch data'
+            };
+          }
+        })
+      );
+      
+      // Send updates to subscribed clients
+      for (const quote of quotes) {
+        const { symbol, data, error } = quote;
+        const clients = subscriptions.get(symbol);
+        
+        if (clients) {
+          const message = JSON.stringify({
+            type: 'quote',
+            symbol,
+            data: data || null,
+            error,
+            timestamp: Date.now()
+          });
+          
+          // Send to all subscribed clients
+          for (const client of clients) {
+            if (client.readyState === WebSocket.OPEN) {
+              client.send(message);
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error updating stock data:', error);
+    }
+  }, updateInterval);
+  
   return httpServer;
 }
