@@ -15,6 +15,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Header from "@/components/layout/header";
 import { useAuth } from "@/hooks/use-auth";
+import { useTheme } from "@/hooks/use-theme";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { UserPreferences } from "@shared/schema";
@@ -39,8 +40,9 @@ type ProfileFormValues = z.infer<typeof profileFormSchema>;
 type PreferencesFormValues = z.infer<typeof preferencesFormSchema>;
 
 const ProfilePage = () => {
-  const [location] = useLocation();
+  const [, navigate] = useLocation();
   const { user } = useAuth();
+  const { darkMode, setDarkMode } = useTheme();
   const { toast } = useToast();
   const urlParams = new URLSearchParams(window.location.search);
   const defaultTab = urlParams.get("tab") || "personal";
@@ -78,9 +80,9 @@ const ProfilePage = () => {
   useEffect(() => {
     if (preferences) {
       preferencesForm.reset({
-        emailNotifications: preferences.emailNotifications,
-        priceAlerts: preferences.priceAlerts,
-        darkMode: preferences.darkMode
+        emailNotifications: preferences.emailNotifications ?? true,
+        priceAlerts: preferences.priceAlerts ?? true,
+        darkMode: preferences.darkMode ?? false
       });
     }
   }, [preferences, preferencesForm]);
@@ -171,7 +173,7 @@ const ProfilePage = () => {
       <main className="flex-grow container mx-auto px-4 py-6">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-semibold">Your Profile</h1>
-          <Button variant="outline" onClick={() => location('/')}>
+          <Button variant="outline" onClick={() => navigate('/')}>
             Back to Dashboard
           </Button>
         </div>
@@ -344,7 +346,7 @@ const ProfilePage = () => {
                           <span className="px-2 py-1 bg-secondary bg-opacity-10 text-secondary text-xs rounded-md mr-2">
                             Active
                           </span>
-                          <Button size="sm" variant="link" onClick={() => location('/membership')}>
+                          <Button size="sm" variant="link" onClick={() => navigate('/membership')}>
                             {user?.membershipType === "Basic" ? "Upgrade" : "Manage"}
                           </Button>
                         </div>
@@ -438,7 +440,12 @@ const ProfilePage = () => {
                                   <FormControl>
                                     <Switch
                                       checked={field.value}
-                                      onCheckedChange={field.onChange}
+                                      onCheckedChange={(checked) => {
+                                        // Update form field
+                                        field.onChange(checked);
+                                        // Update theme context
+                                        setDarkMode(checked);
+                                      }}
                                     />
                                   </FormControl>
                                 </FormItem>

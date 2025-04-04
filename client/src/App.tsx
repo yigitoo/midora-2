@@ -11,6 +11,7 @@ import WatchlistPage from "@/pages/watchlist-page";
 import MarketPage from "@/pages/market-page";
 import NewsPage from "@/pages/news-page";
 import { AuthProvider } from "@/hooks/use-auth";
+import { ThemeProvider } from "@/hooks/use-theme";
 import { ProtectedRoute } from "@/lib/protected-route";
 
 function Router() {
@@ -32,8 +33,10 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <Router />
-        <Toaster />
+        <ThemeProvider>
+          <Router />
+          <Toaster />
+        </ThemeProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

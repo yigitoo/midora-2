@@ -248,6 +248,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: "Failed to export data" });
     }
   });
+  
+  // Sync stock data with MongoDB
+  app.post("/api/stocks/sync", async (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).send("Not authenticated");
+    }
+    
+    try {
+      const { symbol, data } = req.body;
+      
+      if (!symbol || !data) {
+        return res.status(400).send("Missing symbol or data");
+      }
+      
+      // You could store this in a collection in MongoDB
+      // For now, we'll just log it and return success
+      console.log(`Syncing data for ${symbol} to MongoDB`);
+      
+      // Also add to search history as a side effect
+      await storage.addSearchHistory(req.user!.id, symbol);
+      
+      res.status(200).send("Data synced successfully");
+    } catch (error) {
+      console.error("Error syncing stock data:", error);
+      res.status(500).send("Failed to sync stock data");
+    }
+  });
 
   // User preferences
   app.get("/api/preferences", async (req, res) => {

@@ -18,13 +18,17 @@ export function LiveStockTicker({
   className = '',
   onSelectStock
 }: LiveStockTickerProps) {
-  const { quotes, errors, isConnected } = useStockWebSocket(symbols);
+  const { quotes, error, connected } = useStockWebSocket(symbols);
   const [previousPrices, setPreviousPrices] = useState<Record<string, number>>({});
   const [priceChanges, setPriceChanges] = useState<Record<string, 'up' | 'down' | 'none'>>({});
   
   // Track price changes for animation
   useEffect(() => {
+    if (!quotes) return;
+    
     Object.entries(quotes).forEach(([symbol, quote]) => {
+      if (!quote || !quote.regularMarketPrice) return;
+      
       const prevPrice = previousPrices[symbol];
       const currentPrice = quote.regularMarketPrice;
       
@@ -45,11 +49,13 @@ export function LiveStockTicker({
   }, [quotes, previousPrices]);
   
   // Sort stocks by percentage change
-  const sortedStocks = Object.values(quotes).sort((a, b) => {
-    const aChange = a.regularMarketChangePercent || 0;
-    const bChange = b.regularMarketChangePercent || 0;
-    return bChange - aChange;
-  });
+  const sortedStocks = quotes ? Object.values(quotes)
+    .filter(quote => quote && quote.symbol) // Filter out invalid quotes
+    .sort((a, b) => {
+      const aChange = a.regularMarketChangePercent || 0;
+      const bChange = b.regularMarketChangePercent || 0;
+      return bChange - aChange;
+    }) : [];
   
   const handleStockClick = (symbol: string) => {
     if (onSelectStock) {
@@ -62,8 +68,8 @@ export function LiveStockTicker({
       <CardHeader className="pb-2">
         <div className="flex justify-between items-center">
           <CardTitle className="text-lg">{title}</CardTitle>
-          <Badge variant={isConnected ? "outline" : "destructive"} className="text-xs">
-            {isConnected ? "Live" : "Offline"}
+          <Badge variant={connected ? "outline" : "destructive"} className="text-xs">
+            {connected ? "Live" : "Offline"}
           </Badge>
         </div>
       </CardHeader>
@@ -71,6 +77,8 @@ export function LiveStockTicker({
         <div className="space-y-1">
           {sortedStocks.length > 0 ? (
             sortedStocks.map((stock) => {
+              if (!stock || !stock.symbol) return null;
+              
               const isPositive = (stock.regularMarketChangePercent || 0) > 0;
               const changeDirection = priceChanges[stock.symbol] || 'none';
               const isChangeUp = changeDirection === 'up';
@@ -105,13 +113,9 @@ export function LiveStockTicker({
             </div>
           )}
           
-          {Object.keys(errors).length > 0 && (
+          {error && (
             <div className="mt-2 text-sm text-red-500">
-              {Object.entries(errors).map(([symbol, error]) => (
-                <div key={symbol}>
-                  Error loading {symbol}: {error}
-                </div>
-              ))}
+              Error: {error}
             </div>
           )}
         </div>

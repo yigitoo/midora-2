@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { StockQuote, StockWebSocketMessage } from '@/types/stock';
+import { apiRequest } from '@/lib/queryClient';
 
 type SubscriptionMessage = {
   type: 'subscribe' | 'unsubscribe';
@@ -29,9 +30,15 @@ type WebSocketMessage = SubscriptionMessage | QuoteMessage;
 export function useStockWebSocket(symbols: string[]) {
   const [connected, setConnected] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [quotes, setQuotes] = useState<Record<string, StockQuoteWithMeta>>({});
+  const [quotes, setQuotes] = useState<Record<string, StockQuoteWithMeta> | null>(null);
   const socketRef = useRef<WebSocket | null>(null);
   const reconnectTimeoutRef = useRef<number | null>(null);
+  const symbolsRef = useRef<string[]>(symbols);
+
+  // Keep track of the latest symbols array
+  useEffect(() => {
+    symbolsRef.current = symbols;
+  }, [symbols]);
 
   // Setup WebSocket connection
   useEffect(() => {
@@ -47,8 +54,13 @@ export function useStockWebSocket(symbols: string[]) {
           setConnected(true);
           setError(null);
           
+          // Initialize an empty quotes object
+          if (!quotes) {
+            setQuotes({});
+          }
+          
           // Subscribe to symbols
-          symbols.forEach(symbol => {
+          symbolsRef.current.forEach(symbol => {
             const message: SubscriptionMessage = {
               type: 'subscribe',
               symbol: symbol.toUpperCase()
@@ -62,14 +74,22 @@ export function useStockWebSocket(symbols: string[]) {
             const message = JSON.parse(event.data) as QuoteMessage;
             
             if (message.type === 'quote') {
-              setQuotes(prev => ({
-                ...prev,
-                [message.symbol]: {
-                  ...message.data,
-                  _error: message.error,
-                  _timestamp: message.timestamp || Date.now()
-                }
-              }));
+              setQuotes(prev => {
+                if (!prev) prev = {};
+                return {
+                  ...prev,
+                  [message.symbol]: {
+                    ...message.data,
+                    _error: message.error,
+                    _timestamp: message.timestamp || Date.now()
+                  }
+                };
+              });
+              
+              // Sync with MongoDB if we have a valid quote
+              if (message.data && !message.error) {
+                syncStockDataWithMongoDB(message.symbol, message.data);
+              }
             }
           } catch (err) {
             console.error('Failed to parse WebSocket message:', err);
@@ -112,7 +132,7 @@ export function useStockWebSocket(symbols: string[]) {
     return () => {
       if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
         // Unsubscribe from all symbols
-        symbols.forEach(symbol => {
+        symbolsRef.current.forEach(symbol => {
           const message: SubscriptionMessage = {
             type: 'unsubscribe',
             symbol: symbol.toUpperCase()
@@ -127,13 +147,14 @@ export function useStockWebSocket(symbols: string[]) {
         window.clearTimeout(reconnectTimeoutRef.current);
       }
     };
-  }, [symbols.join(',')]); // Only re-run if the symbols array changes
+  }, []); // Only run once on mount
   
-  // Handle adding new symbols
+  // Handle changes to symbols array
   useEffect(() => {
     if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+      // Subscribe to new symbols
       symbols.forEach(symbol => {
-        if (!quotes[symbol]) {
+        if (!quotes || !quotes[symbol]) {
           const message: SubscriptionMessage = {
             type: 'subscribe',
             symbol: symbol.toUpperCase()
@@ -141,12 +162,49 @@ export function useStockWebSocket(symbols: string[]) {
           socketRef.current?.send(JSON.stringify(message));
         }
       });
+      
+      // Unsubscribe from removed symbols
+      if (quotes) {
+        Object.keys(quotes).forEach(symbol => {
+          if (!symbols.includes(symbol)) {
+            const message: SubscriptionMessage = {
+              type: 'unsubscribe',
+              symbol: symbol.toUpperCase()
+            };
+            socketRef.current?.send(JSON.stringify(message));
+            
+            // Remove from quotes state
+            setQuotes(prev => {
+              if (!prev) return prev;
+              const updated = { ...prev };
+              delete updated[symbol];
+              return updated;
+            });
+          }
+        });
+      }
     }
   }, [symbols, quotes]);
   
+  // Sync stock data with MongoDB
+  const syncStockDataWithMongoDB = async (symbol: string, data: StockQuote) => {
+    try {
+      // This endpoint would be created on the server to store stock data
+      await apiRequest('POST', '/api/stocks/sync', {
+        symbol,
+        data
+      }).catch(err => {
+        // Silently fail - we don't want to disrupt the UI
+        console.error('Failed to sync stock data:', err);
+      });
+    } catch (error) {
+      console.error('Error syncing stock data with MongoDB:', error);
+    }
+  };
+  
   return {
-    connected,
-    error,
     quotes,
+    error,
+    connected,
   };
 }
