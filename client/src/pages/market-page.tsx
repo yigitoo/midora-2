@@ -10,7 +10,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { formatNumber, formatPercentage } from "@/lib/utils";
 
 const MarketPage = () => {
-  const [location] = useLocation();
+  const [location, navigate] = useLocation();
   const [activeTab, setActiveTab] = useState("us");
   
   // Fetch market indices
@@ -34,7 +34,7 @@ const MarketPage = () => {
   });
   
   const handleViewStock = (symbol: string) => {
-    window.location.href = `/?symbol=${symbol}`;
+    navigate(`/?symbol=${symbol}`);
   };
   
   // Filter indices by market
@@ -60,7 +60,7 @@ const MarketPage = () => {
       <main className="flex-grow container mx-auto px-4 py-6">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-semibold">Market Overview</h1>
-          <Button variant="outline" onClick={() => window.location.href = '/'}>
+          <Button variant="outline" onClick={() => navigate('/')}>
             Back to Dashboard
           </Button>
         </div>

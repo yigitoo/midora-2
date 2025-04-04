@@ -19,7 +19,7 @@ interface WatchlistWithStocks extends WatchlistType {
 }
 
 const WatchlistPage = () => {
-  const [location] = useLocation();
+  const [location, navigate] = useLocation();
   const { user } = useAuth();
   const { toast } = useToast();
   const [activeWatchlist, setActiveWatchlist] = useState<number | null>(null);
@@ -184,8 +184,8 @@ const WatchlistPage = () => {
   };
   
   const navigateToStock = useCallback((symbol: string) => {
-    window.location.href = "/?symbol=" + symbol;
-  }, []);
+    navigate(`/stocks/${symbol}`);
+  }, [navigate]);
   
   return (
     <div className="min-h-screen flex flex-col bg-background text-textDark">
@@ -194,7 +194,7 @@ const WatchlistPage = () => {
       <main className="flex-grow container mx-auto px-4 py-6">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-semibold">Your Watchlists</h1>
-          <Button variant="outline" onClick={() => window.location.href = '/'}>
+          <Button variant="outline" onClick={() => navigate('/')}>
             Back to Dashboard
           </Button>
         </div>
@@ -238,7 +238,7 @@ const WatchlistPage = () => {
                           onClick={() => setActiveWatchlist(watchlist.id)}
                         >
                           <span>{watchlist.name}</span>
-                          {watchlists.length > 1 && activeWatchlist === watchlist.id && (
+                          {activeWatchlist === watchlist.id && (
                             <Button 
                               variant="ghost" 
                               size="sm" 

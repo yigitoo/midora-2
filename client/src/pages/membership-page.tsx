@@ -97,7 +97,7 @@ const paymentSchema = z.object({
 type PaymentFormValues = z.infer<typeof paymentSchema>;
 
 const MembershipPage = () => {
-  const [location] = useLocation();
+  const [location, navigate] = useLocation();
   const { toast } = useToast();
   const { user } = useAuth();
   const [selectedPlan, setSelectedPlan] = useState<PlanType>("pro");
@@ -142,7 +142,7 @@ const MembershipPage = () => {
         title: "Payment successful",
         description: `Your ${selectedPlan} plan is now active!`
       });
-      location("/");
+      navigate("/");
     },
     onError: (error: Error) => {
       toast({
@@ -175,7 +175,7 @@ const MembershipPage = () => {
       <main className="flex-grow container mx-auto px-4 py-6">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-semibold">Choose Your Membership</h1>
-          <Button variant="outline" onClick={() => location("/")}>
+          <Button variant="outline" onClick={() => navigate("/")}>
             Back to Dashboard
           </Button>
         </div>

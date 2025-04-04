@@ -1,0 +1,52 @@
+Your task is to fix and enhance various functionalities on the web application, including the navbar, search box, stock detail pages, and watchlist management.
+
+Here are the specific requirements:
+
+Fix Forum Page Navigation:
+
+Ensure that clicking the “Forum” link in the navbar properly redirects to the forum page.
+Enhance Search Box Functionality:
+
+Make the search box in the navbar fully functional.
+When searching for a company symbol like TSLA (Tesla), ensure it redirects to the correct recent activity page.
+Display the stock graph for the searched company on the recent activity page.
+Add Navigation Menu Items:
+
+Add menu items to the navbar for accessing individual stock pages.
+Create buttons that properly link to these pages.
+Fix Stock Graph Display:
+
+Ensure that each stock symbol (e.g., AAPL for Apple) has an individual page.
+Display the stock graph on these pages.
+Include real-time details and information below the graph.
+Ensure Button Functionality:
+
+Make sure all buttons in the navbar work correctly.
+Fix the “View All” button in recent activity widgets.
+Ensure watchlist management buttons are fully functional.
+Enable the ability to delete newly created watchlists using the trash button (currently, only “My Watchlist” is deleteable).
+Please follow the steps below to address these issues:
+
+Step 1 - Fix Forum Page Navigation:
+
+Locate the code handling navbar links.
+Correct any issues preventing the “Forum” link from functioning.
+Step 2 - Enhance Search Box Functionality:
+
+Verify the search query handling mechanism.
+Ensure that it correctly redirects and displays relevant recent activity and the corresponding stock graph for searched symbols like TSLA.
+Step 3 - Update Navbar with New Menu Items:
+
+Add links for individual stock pages to the navbar.
+Create buttons for easy navigation to these pages.
+Step 4 - Fix Stock Graph Display and Real-Time Information:
+
+Ensure each stock symbol (e.g., AAPL) has its own page.
+Implement functionality to display the stock graph and real-time information below it on these individual pages.
+Step 5 - Ensure Button Functionality:
+
+Review and correct functionality for all navbar buttons.
+Fix the “View All” part in recent activity widgets.
+Make sure all watchlist manage buttons work as expected.
+Enable deleting of newly created watchlists using the trash button.
+Please ensure thorough testing of each feature mentioned above to confirm that everything works correctly.

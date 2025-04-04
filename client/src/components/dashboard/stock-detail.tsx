@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -26,6 +27,7 @@ interface StockDetailProps {
 
 const StockDetail = ({ symbol = "AAPL" }: StockDetailProps) => {
   const [timeframe, setTimeframe] = useState<TimeframeOption>("1D");
+  const [, navigate] = useLocation();
   
   const { data: stockData, isLoading: isLoadingStock } = useQuery<StockQuote>({
     queryKey: [`/api/stocks/${symbol}`],
@@ -71,7 +73,10 @@ const StockDetail = ({ symbol = "AAPL" }: StockDetailProps) => {
               </>
             ) : (
               <>
-                <div className="flex items-center">
+                <div 
+                  className="flex items-center cursor-pointer hover:opacity-80" 
+                  onClick={() => navigate(`/stocks/${symbol}`)}
+                >
                   <h2 className="text-2xl font-semibold">{symbol}</h2>
                   <span className="ml-2 text-gray-500">{stockData?.shortName || stockData?.longName}</span>
                 </div>
@@ -102,15 +107,26 @@ const StockDetail = ({ symbol = "AAPL" }: StockDetailProps) => {
                 </Toggle>
               ))}
             </div>
-            <div className="flex justify-end">
+            <div className="flex justify-end space-x-2">
               <Button variant="outline" className="flex items-center" onClick={handleExport}>
                 <i className="ri-download-line mr-1"></i> Export Data
+              </Button>
+              <Button
+                variant="default"
+                className="flex items-center"
+                onClick={() => navigate(`/stocks/${symbol}`)}
+              >
+                <i className="ri-external-link-line mr-1"></i> View Details
               </Button>
             </div>
           </div>
         </div>
         
-        <div className="chart-container mb-6" style={{ height: "400px" }}>
+        <div 
+          className="chart-container mb-6 cursor-pointer" 
+          style={{ height: "400px" }}
+          onClick={() => navigate(`/stocks/${symbol}`)}
+        >
           {isLoadingHistory ? (
             <Skeleton className="h-full w-full" />
           ) : historicalData && historicalData.length > 0 ? (

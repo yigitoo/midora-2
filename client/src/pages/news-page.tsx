@@ -8,7 +8,7 @@ import NewsFeed from "@/components/news/news-feed";
 import { Newspaper, TrendingUp, Globe, BarChart3 } from "lucide-react";
 
 const NewsPage = () => {
-  const [location] = useLocation();
+  const [location, navigate] = useLocation();
   const [activeTab, setActiveTab] = useState("business");
   
   return (
@@ -18,7 +18,7 @@ const NewsPage = () => {
       <main className="flex-grow container mx-auto px-4 py-6">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-semibold">Financial News</h1>
-          <Button variant="outline" onClick={() => window.location.href = '/'}>
+          <Button variant="outline" onClick={() => navigate('/')}>
             Back to Dashboard
           </Button>
         </div>

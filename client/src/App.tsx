@@ -10,6 +10,7 @@ import MembershipPage from "@/pages/membership-page";
 import WatchlistPage from "@/pages/watchlist-page";
 import MarketPage from "@/pages/market-page";
 import NewsPage from "@/pages/news-page";
+import StockDetailPage from "@/pages/stock-detail-page";
 // Forum pages
 import ForumCategoriesPage from "./pages/forum/categories-page";
 import ForumTopicsPage from "./pages/forum/topics-page";
@@ -27,6 +28,7 @@ function Router() {
       <ProtectedRoute path="/watchlist" component={WatchlistPage} />
       <ProtectedRoute path="/market" component={MarketPage} />
       <ProtectedRoute path="/news" component={NewsPage} />
+      <ProtectedRoute path="/stocks/:symbol" component={StockDetailPage} />
       <ProtectedRoute path="/forum" component={ForumCategoriesPage} />
       <ProtectedRoute path="/forum/category/:id" component={ForumTopicsPage} />
       <ProtectedRoute path="/forum/topic/:id" component={ForumTopicPage} />

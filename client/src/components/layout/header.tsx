@@ -23,14 +23,16 @@ const Header = () => {
     if (!searchQuery.trim()) return;
     
     try {
-      // Navigate to dashboard with the stock symbol
-      navigate(`/?symbol=${searchQuery.toUpperCase()}`);
+      const symbol = searchQuery.trim().toUpperCase();
+      
+      // Add to search history
+      await apiRequest("GET", `/api/stocks/${symbol}`);
+      
+      // Navigate to the stock detail page
+      navigate(`/stocks/${symbol}`);
       
       // Reset search input
       setSearchQuery("");
-      
-      // Add to search history
-      await apiRequest("GET", `/api/stocks/${searchQuery}`);
       
       // Invalidate activity data
       queryClient.invalidateQueries({ queryKey: ["/api/activity"] });

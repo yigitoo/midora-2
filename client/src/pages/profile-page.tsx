@@ -40,13 +40,19 @@ type ProfileFormValues = z.infer<typeof profileFormSchema>;
 type PreferencesFormValues = z.infer<typeof preferencesFormSchema>;
 
 const ProfilePage = () => {
-  const [, navigate] = useLocation();
+  const [location, navigate] = useLocation();
   const { user } = useAuth();
   const { darkMode, setDarkMode } = useTheme();
   const { toast } = useToast();
   const urlParams = new URLSearchParams(window.location.search);
   const defaultTab = urlParams.get("tab") || "personal";
   const [activeTab, setActiveTab] = useState(defaultTab);
+  
+  // Update URL when tab changes
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+    navigate(`/profile?tab=${tab}`, { replace: true });
+  };
   const [avatarPreview, setAvatarPreview] = useState<string | null>(user?.avatar || null);
   
   // Get user preferences
@@ -213,28 +219,28 @@ const ProfilePage = () => {
                   <Button 
                     variant={activeTab === "personal" ? "default" : "outline"}
                     className="w-full justify-start"
-                    onClick={() => setActiveTab("personal")}
+                    onClick={() => handleTabChange("personal")}
                   >
                     <i className="ri-user-line mr-2"></i> Personal Info
                   </Button>
                   <Button 
                     variant={activeTab === "security" ? "default" : "outline"}
                     className="w-full justify-start"
-                    onClick={() => setActiveTab("security")}
+                    onClick={() => handleTabChange("security")}
                   >
                     <i className="ri-lock-line mr-2"></i> Security
                   </Button>
                   <Button 
                     variant={activeTab === "membership" ? "default" : "outline"}
                     className="w-full justify-start"
-                    onClick={() => setActiveTab("membership")}
+                    onClick={() => handleTabChange("membership")}
                   >
                     <i className="ri-vip-diamond-line mr-2"></i> Membership
                   </Button>
                   <Button 
                     variant={activeTab === "preferences" ? "default" : "outline"}
                     className="w-full justify-start"
-                    onClick={() => setActiveTab("preferences")}
+                    onClick={() => handleTabChange("preferences")}
                   >
                     <i className="ri-settings-4-line mr-2"></i> Preferences
                   </Button>
@@ -244,7 +250,7 @@ const ProfilePage = () => {
             
             {/* Profile Content */}
             <div className="md:w-3/4 p-6">
-              <Tabs value={activeTab} onValueChange={setActiveTab}>
+              <Tabs value={activeTab} onValueChange={handleTabChange}>
                 <TabsContent value="personal">
                   <div className="mb-6">
                     <h3 className="text-xl font-semibold mb-4">Personal Information</h3>

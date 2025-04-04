@@ -1,10 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
+import { useLocation } from "wouter";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SearchHistory } from "@shared/schema";
 import { formatRelativeTime } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 const RecentActivity = () => {
+  const [location, navigate] = useLocation();
   const { data: activities, isLoading } = useQuery<SearchHistory[]>({
     queryKey: ["/api/activity"],
   });
@@ -12,13 +15,23 @@ const RecentActivity = () => {
   const getIconForActivity = (activity: SearchHistory) => {
     return "ri-search-line";
   };
+  
+  const handleViewAll = () => {
+    navigate("/search-history");
+  };
+  
+  const handleSymbolClick = (symbol: string) => {
+    navigate(`/stocks/${symbol}`);
+  };
 
   return (
     <Card>
       <CardHeader className="pb-2">
         <div className="flex justify-between items-center">
           <CardTitle className="text-lg">Recent Activity</CardTitle>
-          <button className="text-primary text-sm font-medium">View All</button>
+          <Button variant="link" className="p-0 h-auto text-primary text-sm font-medium" onClick={handleViewAll}>
+            View All
+          </Button>
         </div>
       </CardHeader>
       <CardContent>
@@ -38,7 +51,8 @@ const RecentActivity = () => {
           activities.map((activity, index) => (
             <div 
               key={index} 
-              className={`py-3 ${index < activities.length - 1 ? 'border-b border-borderColor' : ''}`}
+              className={`py-3 ${index < activities.length - 1 ? 'border-b border-borderColor' : ''} cursor-pointer hover:bg-gray-50`}
+              onClick={() => handleSymbolClick(activity.symbol)}
             >
               <div className="flex items-center">
                 <i className={`${getIconForActivity(activity)} text-gray-500 mr-2`}></i>
