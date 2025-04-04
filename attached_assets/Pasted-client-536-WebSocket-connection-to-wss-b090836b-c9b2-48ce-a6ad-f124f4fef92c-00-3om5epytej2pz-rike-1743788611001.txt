@@ -1,0 +1,35 @@
+client:536 WebSocket connection to 'wss://b090836b-c9b2-48ce-a6ad-f124f4fef92c-00-3om5epytej2pz.riker.replit.dev/?token=P-bjCWRzl3V8' failed: 
+client:536 Uncaught (in promise) SyntaxError: Failed to construct 'WebSocket': The URL 'wss://localhost:undefined/?token=P-bjCWRzl3V8' is invalid.
+    at setupWebSocket (client:536:19)
+    at fallback (client:509:16)
+    at WebSocket.<anonymous> (client:555:7)
+chunk-WERSD76P.js?v=2ca9f7cc:21551 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+use-stock-websocket.ts:53 WebSocket connection established
+2
+watchlist.tsx:91 Uncaught TypeError: Cannot read properties of null (reading 'regularMarketChangePercent')
+    at watchlist.tsx:91:45
+    at Array.map (<anonymous>)
+    at Watchlist (watchlist.tsx:90:37)
+chunk-WERSD76P.js?v=2ca9f7cc:14032 The above error occurred in the <Watchlist> component:
+
+    at Watchlist (https://b090836b-c9b2-48ce-a6ad-f124f4fef92c-00-3om5epytej2pz.riker.replit.dev/src/components/dashboard/watchlist.tsx:25:22)
+    at div
+    at div
+    at main
+    at div
+    at Dashboard (https://b090836b-c9b2-48ce-a6ad-f124f4fef92c-00-3om5epytej2pz.riker.replit.dev/src/pages/dashboard.tsx:34:20)
+    at Route (https://b090836b-c9b2-48ce-a6ad-f124f4fef92c-00-3om5epytej2pz.riker.replit.…/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=2ca9f7cc:323:16)
+    at ProtectedRoute (https://b090836b-c9b2-48ce-a6ad-f124f4fef92c-00-3om5epytej2pz.riker.replit.dev/src/lib/protected-route.tsx:22:3)
+    at Switch (https://b090836b-c9b2-48ce-a6ad-f124f4fef92c-00-3om5epytej2pz.riker.replit.…/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=2ca9f7cc:379:17)
+    at Router
+    at ThemeProvider (https://b090836b-c9b2-48ce-a6ad-f124f4fef92c-00-3om5epytej2pz.riker.replit.dev/src/hooks/use-theme.tsx:23:33)
+    at AuthProvider (https://b090836b-c9b2-48ce-a6ad-f124f4fef92c-00-3om5epytej2pz.riker.replit.dev/src/hooks/use-auth.tsx:27:32)
+    at QueryClientProvider (https://b090836b-c9b2-48ce-a6ad-f124f4fef92c-00-3om5epytej2pz.riker.replit.…rkspace/node_modules/.vite/deps/@tanstack_react-query.js?v=2ca9f7cc:2805:3)
+    at App
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+chunk-WERSD76P.js?v=2ca9f7cc:9129 Uncaught TypeError: Cannot read properties of null (reading 'regularMarketChangePercent')
+    at watchlist.tsx:91:45
+    at Array.map (<anonymous>)
+    at Watchlist (watchlist.tsx:90:37)

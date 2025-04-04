@@ -40,7 +40,7 @@ type ProfileFormValues = z.infer<typeof profileFormSchema>;
 type PreferencesFormValues = z.infer<typeof preferencesFormSchema>;
 
 const ProfilePage = () => {
-  const [location, navigate] = useLocation();
+  const [_, navigate] = useLocation();
   const { user } = useAuth();
   const { darkMode, setDarkMode } = useTheme();
   const { toast } = useToast();
@@ -48,7 +48,7 @@ const ProfilePage = () => {
   const defaultTab = urlParams.get("tab") || "personal";
   const [activeTab, setActiveTab] = useState(defaultTab);
   
-  // Update URL when tab changes
+  // Handle tab change and update URL
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
     navigate(`/profile?tab=${tab}`, { replace: true });
