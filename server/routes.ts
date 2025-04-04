@@ -198,6 +198,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         symbol: req.body.symbol
       });
       
+      // Validate the stock symbol by trying to fetch it from Yahoo Finance
+      try {
+        await yahooFinance.quote(validatedData.symbol);
+      } catch (yahooError) {
+        console.error(`Error validating stock symbol ${validatedData.symbol}:`, yahooError);
+        return res.status(400).json({ 
+          message: `Invalid stock symbol: ${validatedData.symbol}. Please provide a valid stock symbol.` 
+        });
+      }
+      
       const item = await storage.addToWatchlist(
         validatedData.watchlistId,
         validatedData.symbol
@@ -571,6 +581,80 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error('Error updating stock data:', error);
     }
   }, updateInterval);
+  
+  // News API routes
+  app.get("/api/news", async (req, res) => {
+    try {
+      const { query, category } = req.query;
+      const apiKey = process.env.NEWS_API_KEY;
+      
+      if (!apiKey) {
+        return res.status(500).json({ error: 'News API key is not configured' });
+      }
+      
+      let url = 'https://newsapi.org/v2/top-headlines?';
+      
+      // If query provided, use it for search
+      if (query) {
+        url += `q=${encodeURIComponent(query as string)}&`;
+      }
+      
+      // Use business category by default, or the specified category
+      url += `category=${category || 'business'}&`;
+      
+      // Only English news
+      url += 'language=en&';
+      
+      // Add API key
+      url += `apiKey=${apiKey}`;
+      
+      const response = await fetch(url);
+      const data = await response.json();
+      
+      if (!response.ok) {
+        console.error('News API error:', data);
+        return res.status(response.status).json(data);
+      }
+      
+      res.json(data);
+    } catch (error) {
+      console.error('Failed to fetch news:', error);
+      res.status(500).json({ error: 'Failed to fetch news data' });
+    }
+  });
+  
+  // Stock-specific news
+  app.get("/api/news/stock/:symbol", async (req, res) => {
+    try {
+      const { symbol } = req.params;
+      const apiKey = process.env.NEWS_API_KEY;
+      
+      if (!apiKey) {
+        return res.status(500).json({ error: 'News API key is not configured' });
+      }
+      
+      // For stock-specific news, we search everything with the company symbol/name
+      let url = 'https://newsapi.org/v2/everything?';
+      
+      url += `q=${encodeURIComponent(symbol)}&`;
+      url += 'language=en&';
+      url += 'sortBy=publishedAt&';
+      url += `apiKey=${apiKey}`;
+      
+      const response = await fetch(url);
+      const data = await response.json();
+      
+      if (!response.ok) {
+        console.error('News API error:', data);
+        return res.status(response.status).json(data);
+      }
+      
+      res.json(data);
+    } catch (error) {
+      console.error('Failed to fetch stock news:', error);
+      res.status(500).json({ error: 'Failed to fetch news data for this stock' });
+    }
+  });
   
   // Forum routes
   app.get("/api/forum/categories", async (req, res) => {

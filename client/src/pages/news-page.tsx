@@ -1,104 +1,15 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
-import { useQuery } from "@tanstack/react-query";
 import Header from "@/components/layout/header";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { StockNewsItem } from "@/types/stock";
-import { useToast } from "@/hooks/use-toast";
-import { formatRelativeTime } from "@/lib/utils";
-import { apiRequest } from "@/lib/queryClient";
+import NewsFeed from "@/components/news/news-feed";
+import { Newspaper, TrendingUp, Globe, BarChart3 } from "lucide-react";
 
 const NewsPage = () => {
   const [location] = useLocation();
-  const { toast } = useToast();
-  const [activeTab, setActiveTab] = useState("trending");
-  const [searchTerm, setSearchTerm] = useState("");
-  
-  // Fetch trending news
-  const { data: trendingNews, isLoading: isLoadingTrending } = useQuery<StockNewsItem[]>({
-    queryKey: ["/api/news/trending"],
-  });
-  
-  // Fetch market news
-  const { data: marketNews, isLoading: isLoadingMarket } = useQuery<StockNewsItem[]>({
-    queryKey: ["/api/news/market"],
-  });
-  
-  // Fetch economy news
-  const { data: economyNews, isLoading: isLoadingEconomy } = useQuery<StockNewsItem[]>({
-    queryKey: ["/api/news/economy"],
-  });
-  
-  // Fetch search results
-  const { data: searchResults, isLoading: isLoadingSearch, refetch: refetchSearch } = useQuery<StockNewsItem[]>({
-    queryKey: ["/api/news/search", searchTerm],
-    enabled: false,
-  });
-  
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!searchTerm.trim()) {
-      toast({
-        title: "Search term required",
-        description: "Please enter a search term",
-        variant: "destructive"
-      });
-      return;
-    }
-    setActiveTab("search");
-    refetchSearch();
-  };
-  
-  // Function to render news list
-  const renderNewsList = (newsList: StockNewsItem[] | undefined, isLoading: boolean) => {
-    if (isLoading) {
-      return <div className="py-8 text-center text-gray-500">Loading news articles...</div>;
-    }
-    
-    if (!newsList || newsList.length === 0) {
-      return <div className="py-8 text-center text-gray-500">No news articles found</div>;
-    }
-    
-    return (
-      <div className="space-y-6">
-        {newsList.map((news, index) => (
-          <Card key={index} className="overflow-hidden">
-            <CardContent className="p-4">
-              <div className="flex gap-4">
-                {news.thumbnail && (
-                  <div className="w-20 h-20 flex-shrink-0">
-                    <img 
-                      src={news.thumbnail} 
-                      alt={news.title}
-                      className="w-full h-full object-cover rounded-md"
-                    />
-                  </div>
-                )}
-                <div className="flex-grow">
-                  <a 
-                    href={news.link} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="block mb-2 font-semibold hover:text-primary"
-                  >
-                    {news.title}
-                  </a>
-                  <p className="text-gray-500 text-sm line-clamp-2 mb-2">{news.summary}</p>
-                  <div className="flex justify-between items-center text-xs text-gray-500">
-                    <span>{news.publisher}</span>
-                    <span>{formatRelativeTime(new Date(news.publishedAt).getTime())}</span>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-    );
-  };
+  const [activeTab, setActiveTab] = useState("business");
   
   return (
     <div className="min-h-screen flex flex-col bg-background text-textDark">
@@ -106,48 +17,86 @@ const NewsPage = () => {
       
       <main className="flex-grow container mx-auto px-4 py-6">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-semibold">Market News</h1>
+          <h1 className="text-2xl font-semibold">Financial News</h1>
           <Button variant="outline" onClick={() => window.location.href = '/'}>
             Back to Dashboard
           </Button>
         </div>
         
-        {/* Search Bar */}
-        <div className="mb-6">
-          <form onSubmit={handleSearch} className="flex gap-2">
-            <Input
-              placeholder="Search for news..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="flex-grow"
-            />
-            <Button type="submit" disabled={isLoadingSearch}>Search</Button>
-          </form>
-        </div>
-        
-        {/* News Content */}
+        {/* News Sections */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="mb-4">
-            <TabsTrigger value="trending">Trending</TabsTrigger>
-            <TabsTrigger value="market">Market</TabsTrigger>
-            <TabsTrigger value="economy">Economy</TabsTrigger>
-            {searchResults && <TabsTrigger value="search">Search Results</TabsTrigger>}
+          <TabsList className="mb-6">
+            <TabsTrigger value="business" className="flex items-center">
+              <BarChart3 className="h-4 w-4 mr-2" />
+              Business
+            </TabsTrigger>
+            <TabsTrigger value="technology" className="flex items-center">
+              <Globe className="h-4 w-4 mr-2" />
+              Technology
+            </TabsTrigger>
+            <TabsTrigger value="general" className="flex items-center">
+              <Newspaper className="h-4 w-4 mr-2" />
+              General
+            </TabsTrigger>
+            <TabsTrigger value="trending" className="flex items-center">
+              <TrendingUp className="h-4 w-4 mr-2" />
+              Trending
+            </TabsTrigger>
           </TabsList>
           
+          <TabsContent value="business">
+            <NewsFeed />
+          </TabsContent>
+          
+          <TabsContent value="technology">
+            <Card className="p-6 text-center">
+              <CardContent>
+                <h3 className="text-lg font-medium mb-2">Technology News</h3>
+                <p className="text-muted-foreground mb-4">
+                  Stay up-to-date with the latest in technology trends, innovations, and market impacts.
+                </p>
+                <Button 
+                  onClick={() => setActiveTab("business")}
+                  className="mx-auto"
+                >
+                  Switch to Business News
+                </Button>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          
+          <TabsContent value="general">
+            <Card className="p-6 text-center">
+              <CardContent>
+                <h3 className="text-lg font-medium mb-2">General News</h3>
+                <p className="text-muted-foreground mb-4">
+                  Catch up on general news and events that might impact financial markets.
+                </p>
+                <Button 
+                  onClick={() => setActiveTab("business")}
+                  className="mx-auto"
+                >
+                  Switch to Business News
+                </Button>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          
           <TabsContent value="trending">
-            {renderNewsList(trendingNews, isLoadingTrending)}
-          </TabsContent>
-          
-          <TabsContent value="market">
-            {renderNewsList(marketNews, isLoadingMarket)}
-          </TabsContent>
-          
-          <TabsContent value="economy">
-            {renderNewsList(economyNews, isLoadingEconomy)}
-          </TabsContent>
-          
-          <TabsContent value="search">
-            {renderNewsList(searchResults, isLoadingSearch)}
+            <Card className="p-6 text-center">
+              <CardContent>
+                <h3 className="text-lg font-medium mb-2">Trending Topics</h3>
+                <p className="text-muted-foreground mb-4">
+                  Discover what's trending in the financial world and get ahead of market movements.
+                </p>
+                <Button 
+                  onClick={() => setActiveTab("business")}
+                  className="mx-auto"
+                >
+                  Switch to Business News
+                </Button>
+              </CardContent>
+            </Card>
           </TabsContent>
         </Tabs>
       </main>

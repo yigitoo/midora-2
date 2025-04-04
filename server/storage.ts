@@ -131,48 +131,369 @@ export class MemStorage implements IStorage {
       description: "Focused discussions on technology sector stocks",
       order: 5
     });
+    
+    const crypto = this.createForumCategoryInternal({
+      name: "Cryptocurrency",
+      description: "Discussions about Bitcoin, Ethereum, and other cryptocurrencies",
+      order: 6
+    });
+    
+    const beginners = this.createForumCategoryInternal({
+      name: "Beginner's Corner",
+      description: "New to investing? Ask your questions here",
+      order: 7
+    });
 
-    // Create sample topics for the market analysis category
-    const topic1 = this.createForumTopicInternal({
+    // MARKET ANALYSIS TOPICS
+    const topicMA1 = this.createForumTopicInternal({
       categoryId: markets.id,
       userId: 1,
       title: "S&P 500 Technical Analysis - April 2025",
       content: "I've been analyzing the S&P 500 chart patterns for April 2025 and noticed some interesting trends. The market seems to be forming a strong support level at 5,800. What are your thoughts on potential resistance levels for the coming weeks?",
-      views: 42,
+      views: 142,
       isPinned: true,
       isLocked: false,
       lastReplyAt: new Date(),
       createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000) // 3 days ago
     });
     
-    const topic2 = this.createForumTopicInternal({
+    const topicMA2 = this.createForumTopicInternal({
+      categoryId: markets.id,
+      userId: 1,
+      title: "Bullish Divergence in Banking Sector",
+      content: "Has anyone else noticed the potential bullish divergence forming in the banking sector? The XLF ETF is showing some interesting patterns on the RSI indicator that might signal a reversal from the recent downtrend. Thoughts?",
+      views: 76,
+      isPinned: false,
+      isLocked: false,
+      lastReplyAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
+      createdAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000)
+    });
+    
+    const topicMA3 = this.createForumTopicInternal({
+      categoryId: markets.id,
+      userId: 1,
+      title: "Volatility Index (VIX) Approaching 5-Year Lows",
+      content: "The VIX is currently approaching 5-year lows at around 12. Historically, this has often preceded market corrections. Are you adjusting your portfolios in anticipation of increased volatility?",
+      views: 113,
+      isPinned: false,
+      isLocked: false,
+      lastReplyAt: new Date(Date.now() - 5 * 60 * 60 * 1000),
+      createdAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000)
+    });
+    
+    const topicMA4 = this.createForumTopicInternal({
+      categoryId: markets.id,
+      userId: 1,
+      title: "Double Top Forming on DJIA?",
+      content: "The Dow Jones Industrial Average appears to be forming a double top pattern. If confirmed, this could signal a trend reversal. Has anyone else spotted this, and what technical indicators are you using to confirm?",
+      views: 92,
+      isPinned: false,
+      isLocked: false,
+      lastReplyAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+      createdAt: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000)
+    });
+
+    // ECONOMICS & GLOBAL MARKETS TOPICS
+    const topicEcon1 = this.createForumTopicInternal({
+      categoryId: economics.id,
+      userId: 1,
+      title: "Impact of Recent Fed Policy on Emerging Markets",
+      content: "The Federal Reserve's recent policy shift seems to be having significant effects on emerging market currencies and equities. I'm particularly watching Indonesia and Brazil. What markets are you monitoring, and what trends are you seeing?",
+      views: 89,
+      isPinned: false,
+      isLocked: false,
+      lastReplyAt: new Date(Date.now() - 10 * 60 * 60 * 1000),
+      createdAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000)
+    });
+    
+    const topicEcon2 = this.createForumTopicInternal({
+      categoryId: economics.id,
+      userId: 1,
+      title: "European Central Bank's New Monetary Strategy",
+      content: "The ECB has announced a new monetary strategy that seems to be allowing for higher inflation targets. How might this affect European equities and the Euro in the long term?",
+      views: 105,
+      isPinned: true,
+      isLocked: false,
+      lastReplyAt: new Date(Date.now() - 15 * 60 * 60 * 1000),
+      createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000)
+    });
+    
+    const topicEcon3 = this.createForumTopicInternal({
+      categoryId: economics.id,
+      userId: 1,
+      title: "China's GDP Growth Projections for 2025-2026",
+      content: "According to recent reports, China's projected GDP growth for 2025-2026 has been revised downward to 4.5%. This is lower than previous forecasts. What might this mean for global supply chains and commodity prices?",
+      views: 78,
+      isPinned: false,
+      isLocked: false,
+      lastReplyAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+      createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+    });
+
+    // FINANCIAL NEWS TOPICS
+    const topicNews1 = this.createForumTopicInternal({
+      categoryId: news.id,
+      userId: 1,
+      title: "Breaking: Major Merger Announced in Pharmaceuticals",
+      content: "Two of the largest pharmaceutical companies just announced a $65 billion merger. This could reshape the entire industry. What are your thoughts on potential investment opportunities or risks resulting from this?",
+      views: 156,
+      isPinned: true,
+      isLocked: false,
+      lastReplyAt: new Date(Date.now() - 25 * 60 * 60 * 1000),
+      createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000)
+    });
+    
+    const topicNews2 = this.createForumTopicInternal({
+      categoryId: news.id,
+      userId: 1,
+      title: "New Regulations Coming for Fintech Industry",
+      content: "Regulatory bodies have announced new frameworks for fintech companies, especially those involved in payment processing and cryptocurrencies. This could significantly impact companies like Square, PayPal, and Coinbase.",
+      views: 112,
+      isPinned: false,
+      isLocked: false,
+      lastReplyAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
+      createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000)
+    });
+
+    // TRADING STRATEGIES TOPICS
+    const topicStrat1 = this.createForumTopicInternal({
+      categoryId: strategies.id,
+      userId: 1,
+      title: "Backtesting Results: Moving Average Crossover Strategy",
+      content: "I've been backtesting a moving average crossover strategy using 50-day and 200-day EMAs on the S&P 500 since 2010. The results show a 9.8% annual return with a 12% drawdown. I'll share my detailed methodology if anyone's interested.",
+      views: 203,
+      isPinned: true,
+      isLocked: false,
+      lastReplyAt: new Date(Date.now() - 8 * 60 * 60 * 1000),
+      createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000)
+    });
+    
+    const topicStrat2 = this.createForumTopicInternal({
+      categoryId: strategies.id,
+      userId: 1,
+      title: "Options Wheel Strategy Performance",
+      content: "For the past 6 months, I've been implementing the 'wheel strategy' (selling puts, then covered calls if assigned) on blue-chip stocks. My annualized return is around 15%, but I'm concerned about tail risk. Has anyone else used this strategy through a market downturn?",
+      views: 178,
+      isPinned: false,
+      isLocked: false,
+      lastReplyAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+      createdAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000)
+    });
+    
+    const topicStrat3 = this.createForumTopicInternal({
+      categoryId: strategies.id,
+      userId: 1,
+      title: "Sector Rotation Strategy Based on Economic Cycles",
+      content: "I'm developing a sector rotation strategy based on economic cycles, moving between defensive and cyclical sectors. Does anyone have experience with this approach? What indicators do you use to time sector shifts?",
+      views: 134,
+      isPinned: false,
+      isLocked: false,
+      lastReplyAt: new Date(Date.now() - 24 * 60 * 60 * 1000),
+      createdAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000)
+    });
+
+    // TECHNOLOGY STOCKS TOPICS
+    const topicTech1 = this.createForumTopicInternal({
       categoryId: tech.id,
       userId: 1,
       title: "AI Companies Growth Potential",
       content: "I'm looking at several AI-focused companies that have shown strong growth over the past year. Companies like NVIDIA, Microsoft, and Google have made significant investments in AI. Which AI stocks do you think have the biggest growth potential for the next 5 years?",
-      views: 28,
+      views: 228,
       isPinned: false,
       isLocked: false,
-      lastReplyAt: new Date(Date.now() - 12 * 60 * 60 * 1000), // 12 hours ago
-      createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000) // 5 days ago
+      lastReplyAt: new Date(Date.now() - 12 * 60 * 60 * 1000),
+      createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000)
+    });
+    
+    const topicTech2 = this.createForumTopicInternal({
+      categoryId: tech.id,
+      userId: 1,
+      title: "Semiconductor Shortage: Investment Implications",
+      content: "The ongoing semiconductor shortage is affecting numerous industries. Which companies are best positioned to benefit, and which are most vulnerable? I'm particularly interested in smaller players that might be overlooked.",
+      views: 194,
+      isPinned: true,
+      isLocked: false,
+      lastReplyAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+      createdAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000)
+    });
+    
+    const topicTech3 = this.createForumTopicInternal({
+      categoryId: tech.id,
+      userId: 1,
+      title: "Evaluating Cloud Computing Companies",
+      content: "I'm trying to evaluate which cloud computing companies offer the best investment opportunities. Beyond the obvious players (AWS, Azure, Google Cloud), are there any specialized cloud providers worth investigating?",
+      views: 167,
+      isPinned: false,
+      isLocked: false,
+      lastReplyAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000),
+      createdAt: new Date(Date.now() - 11 * 24 * 60 * 60 * 1000)
+    });
+    
+    const topicTech4 = this.createForumTopicInternal({
+      categoryId: tech.id,
+      userId: 1,
+      title: "Analysis of Apple's Recent Product Announcements",
+      content: "Apple's recent product announcements seem to be focusing heavily on services rather than hardware innovation. How might this shift affect their revenue model and growth prospects going forward?",
+      views: 153,
+      isPinned: false,
+      isLocked: false,
+      lastReplyAt: new Date(Date.now() - 14 * 60 * 60 * 1000),
+      createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
     });
 
-    // Add some sample replies
+    // CRYPTOCURRENCY TOPICS
+    const topicCrypto1 = this.createForumTopicInternal({
+      categoryId: crypto.id,
+      userId: 1,
+      title: "Bitcoin Halving 2024: Price Implications",
+      content: "With the Bitcoin halving approaching in 2024, what are your price predictions? Historically, halvings have preceded bull runs, but is this time different given the increased institutional involvement?",
+      views: 287,
+      isPinned: true,
+      isLocked: false,
+      lastReplyAt: new Date(Date.now() - 4 * 60 * 60 * 1000),
+      createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000)
+    });
+    
+    const topicCrypto2 = this.createForumTopicInternal({
+      categoryId: crypto.id,
+      userId: 1,
+      title: "Ethereum's Transition to Proof-of-Stake",
+      content: "Ethereum's complete transition to proof-of-stake seems to have reduced its energy consumption by over 99%. How might this affect its adoption and competitiveness against other smart contract platforms?",
+      views: 241,
+      isPinned: false,
+      isLocked: false,
+      lastReplyAt: new Date(Date.now() - 9 * 60 * 60 * 1000),
+      createdAt: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000)
+    });
+    
+    const topicCrypto3 = this.createForumTopicInternal({
+      categoryId: crypto.id,
+      userId: 1,
+      title: "Central Bank Digital Currencies (CBDCs) vs. Cryptocurrencies",
+      content: "As more central banks announce CBDC initiatives, what might be the implications for decentralized cryptocurrencies? Will they coexist, or will CBDCs potentially replace some use cases for cryptocurrencies?",
+      views: 198,
+      isPinned: false,
+      isLocked: false,
+      lastReplyAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+      createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000)
+    });
+
+    // BEGINNER'S CORNER TOPICS
+    const topicBeg1 = this.createForumTopicInternal({
+      categoryId: beginners.id,
+      userId: 1,
+      title: "Getting Started with Investing: Best Resources?",
+      content: "I'm completely new to investing and want to start learning. What books, courses, or websites would you recommend for absolute beginners? I'm particularly interested in long-term investing strategies.",
+      views: 324,
+      isPinned: true,
+      isLocked: false,
+      lastReplyAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
+      createdAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000)
+    });
+    
+    const topicBeg2 = this.createForumTopicInternal({
+      categoryId: beginners.id,
+      userId: 1,
+      title: "ETFs vs. Individual Stocks for New Investors",
+      content: "As a new investor with about $5,000 to start with, should I focus on ETFs or try picking individual stocks? I understand ETFs offer more diversification, but individual stocks might offer higher returns. What's your advice?",
+      views: 276,
+      isPinned: false,
+      isLocked: false,
+      lastReplyAt: new Date(Date.now() - 16 * 60 * 60 * 1000),
+      createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+    });
+    
+    const topicBeg3 = this.createForumTopicInternal({
+      categoryId: beginners.id,
+      userId: 1,
+      title: "Understanding P/E Ratios and Other Valuation Metrics",
+      content: "I'm trying to understand how to value stocks using metrics like P/E ratios, P/B, and PEG. Can someone explain in simple terms what these metrics mean and how to use them to evaluate if a stock is overvalued or undervalued?",
+      views: 245,
+      isPinned: false,
+      isLocked: false,
+      lastReplyAt: new Date(Date.now() - 24 * 60 * 60 * 1000),
+      createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000)
+    });
+
+    // Add sample replies to popular topics
     this.createForumReplyInternal({
-      topicId: topic1.id,
+      topicId: topicMA1.id,
       userId: 1,
       content: "Great analysis! I think we might see resistance at 6,000 based on previous patterns. The market has been quite bullish lately despite economic uncertainties.",
       isEdited: false,
-      createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
+      createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
       editedAt: undefined
     });
     
     this.createForumReplyInternal({
-      topicId: topic1.id,
+      topicId: topicMA1.id,
       userId: 1,
       content: "I've been tracking moving averages and we're well above the 200-day MA, which suggests continued upward momentum. However, I'm keeping an eye on the MACD for any signs of divergence.",
       isEdited: false,
-      createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000), // 1 day ago
+      createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000),
+      editedAt: undefined
+    });
+    
+    this.createForumReplyInternal({
+      topicId: topicMA1.id,
+      userId: 1,
+      content: "Don't forget to consider broader economic indicators. The yield curve suggests potential headwinds, and the upcoming earnings season might bring surprises that could test those support levels.",
+      isEdited: false,
+      createdAt: new Date(Date.now() - 12 * 60 * 60 * 1000),
+      editedAt: undefined
+    });
+    
+    this.createForumReplyInternal({
+      topicId: topicTech1.id,
+      userId: 1,
+      content: "NVIDIA seems well-positioned given their dominance in ML/AI chips. They're not just riding the AI wave but actively shaping it with their CUDA ecosystem.",
+      isEdited: false,
+      createdAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000),
+      editedAt: undefined
+    });
+    
+    this.createForumReplyInternal({
+      topicId: topicTech1.id,
+      userId: 1,
+      content: "Don't overlook smaller players like Palantir and C3.ai that are focused on making AI accessible to enterprises. The picks-and-shovels approach might be less risky than betting on specific AI applications.",
+      isEdited: false,
+      createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+      editedAt: undefined
+    });
+    
+    this.createForumReplyInternal({
+      topicId: topicCrypto1.id,
+      userId: 1,
+      content: "Historical patterns suggest a potential price increase, but the growing institutional involvement might dampen volatility. We could see a more gradual appreciation rather than the explosive growth of previous cycles.",
+      isEdited: false,
+      createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+      editedAt: undefined
+    });
+    
+    this.createForumReplyInternal({
+      topicId: topicBeg1.id,
+      userId: 1,
+      content: "I'd recommend starting with 'The Intelligent Investor' by Benjamin Graham for fundamentals, though it's a bit dense. For a more accessible introduction, 'A Random Walk Down Wall Street' by Burton Malkiel is excellent.",
+      isEdited: false,
+      createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+      editedAt: undefined
+    });
+    
+    this.createForumReplyInternal({
+      topicId: topicBeg1.id,
+      userId: 1,
+      content: "Online resources like Investopedia are great for learning terminology. For practical experience without risking real money, try paper trading on platforms like ThinkOrSwim or the Midora simulation tool.",
+      isEdited: false,
+      createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+      editedAt: undefined
+    });
+    
+    this.createForumReplyInternal({
+      topicId: topicBeg1.id,
+      userId: 1,
+      content: "Don't forget about YouTube channels! Patrick Boyle, The Plain Bagel, and Ben Felix offer solid, evidence-based investing content without the hype you sometimes see in financial media.",
+      isEdited: false,
+      createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
       editedAt: undefined
     });
   }
