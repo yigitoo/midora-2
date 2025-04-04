@@ -320,17 +320,22 @@ const WatchlistPage = () => {
                           </thead>
                           <tbody>
                             {watchlistDetails.stockData.map((stock, index) => {
+                              // Skip rendering if stock is null
+                              if (!stock) {
+                                return null;
+                              }
+                              
                               const isPositive = (stock.regularMarketChangePercent || 0) > 0;
                               return (
                                 <tr 
                                   key={index} 
                                   className="border-t border-borderColor hover:bg-hoverBg cursor-pointer"
-                                  onClick={() => navigateToStock(stock.symbol)}
+                                  onClick={() => stock.symbol ? navigateToStock(stock.symbol) : null}
                                 >
                                   <td className="py-3 px-3">
                                     <div>
-                                      <p className="font-medium">{stock.symbol}</p>
-                                      <p className="text-gray-500 text-xs">{stock.shortName || stock.longName}</p>
+                                      <p className="font-medium">{stock.symbol || 'Unknown'}</p>
+                                      <p className="text-gray-500 text-xs">{stock.shortName || stock.longName || 'Unknown'}</p>
                                     </div>
                                   </td>
                                   <td className="py-3 px-3 font-medium">{formatNumber(stock.regularMarketPrice || 0)}</td>
@@ -350,7 +355,9 @@ const WatchlistPage = () => {
                                       className="h-8 w-8 p-0" 
                                       onClick={(e) => {
                                         e.stopPropagation();
-                                        handleRemoveSymbol(stock.symbol);
+                                        if (stock.symbol) {
+                                          handleRemoveSymbol(stock.symbol);
+                                        }
                                       }}
                                     >
                                       <i className="ri-close-line text-gray-500"></i>

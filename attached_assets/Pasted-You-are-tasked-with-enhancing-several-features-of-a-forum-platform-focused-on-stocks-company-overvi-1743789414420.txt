@@ -1,0 +1,33 @@
+You are tasked with enhancing several features of a forum platform focused on stocks, company overviews, and various discussion topics such as finance, economy, politics, and news.
+
+Please address each of the following tasks:
+
+Enhancing the Graphs of Stocks:
+
+Develop an interactive and visually appealing interface for displaying stock performance.
+Features should include the ability to zoom in/out, hover over data points for more details, and toggle between different time frames (e.g., 1 day, 1 week, 1 month, 1 year).
+Use clear lines, distinguishable colors, and smooth animations to ensure the graphs are attractive and easy to read.
+Include detailed information such as stock prices, volume traded, and important financial events annotated on the graph.
+Improving Company Overviews:
+
+Generate detailed and engaging company overviews including:
+Company Background: A brief history and primary business activities.
+Financial Summary: Key financial metrics such as revenue, profit, market capitalization, and stock performance.
+Recent News: Summarize recent news articles or press releases related to the company.
+Future Outlook: Provide analysis of the company’s future growth prospects and potential challenges.
+Visuals: Incorporate relevant charts, graphs, or images to make the overview more engaging.
+Creating and Enhancing Forum Pages:
+
+Design a forum page structure similar to Reddit but focused on finance, economy, politics, and news.
+Create categories such as Finance, Economy, Politics, and News.
+Include sub-categories within each topic to allow for more specific discussions.
+Enable users to create posts and comment on them.
+Add “like” functionalities allowing users to like posts and comments.
+Ensure the poster’s name and profile information are visible with each post or comment.
+Language Filter for Insulting Content:
+
+Integrate an AI-based language filter to prevent insulting or inappropriate content in forum posts and comments.
+The filter should detect and flag offensive language using natural language processing.
+Provide warnings to users attempting to post flagged content, suggesting revisions or blocking the post if necessary.
+Consider the context to avoid false positives, ensuring relevant discussions are not wrongly flagged.
+Display clear guidelines about acceptable language and behavior in the forums (e.g., “Your post contains language that may be considered offensive. Please revise your content to adhere to community guidelines.”).
