@@ -88,7 +88,8 @@ const Watchlist = ({ watchlistId = 1, onSelectStock }: WatchlistProps) => {
                 ))
               ) : watchlist && watchlist.stockData && watchlist.stockData.length > 0 ? (
                 watchlist.stockData.map((stock, index) => {
-                  const isPositive = (stock.regularMarketChangePercent || 0) > 0;
+                  // Add null check to prevent error
+                  const isPositive = stock && stock.regularMarketChangePercent ? stock.regularMarketChangePercent > 0 : false;
                   return (
                     <tr 
                       key={index} 
