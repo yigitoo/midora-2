@@ -4,48 +4,68 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    /* Light theme */
+    --background: 210 40% 98%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
     --primary: 211 100% 40%;
-    --primary-foreground: 210 40% 98%;
+    --primary-foreground: 0 0% 100%;
     --secondary: 152 55% 46%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary-foreground: 0 0% 100%;
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
     --accent: 359 86% 60%;
-    --accent-foreground: 210 40% 98%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 100%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: 211 100% 40%;
     --radius: 0.5rem;
+    
+    /* Custom finance colors for light theme */
+    --up-color: 120 100% 28%;
+    --down-color: 0 84% 60%;
+    --chart-line: 211 100% 40%;
+    --hover-bg: 210 40% 96.1%;
+    --text-dark: 222.2 84% 4.9%;
+    --text-light: 210 40% 98%;
+    --text-muted: 215.4 16.3% 46.9%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
+    /* Dark theme */
+    --background: 222.2 47% 11%;
     --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
+    --card: 222.2 47% 13%;
     --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
+    --popover: 222.2 47% 13%;
     --popover-foreground: 210 40% 98%;
     --primary: 211 100% 50%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 152 55% 46%;
-    --secondary-foreground: 210 40% 98%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 152 55% 50%;
+    --secondary-foreground: 0 0% 100%;
     --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 359 86% 60%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 75.1%;
+    --accent: 359 86% 65%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 74.2% 50.2%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 217.2 32.6% 20.5%;
+    --input: 217.2 32.6% 20.5%;
     --ring: 211 100% 50%;
+    
+    /* Custom finance colors for dark theme */
+    --up-color: 120 100% 45%;
+    --down-color: 0 84% 65%;
+    --chart-line: 211 100% 65%;
+    --hover-bg: 217.2 32.6% 22.5%;
+    --text-dark: 210 40% 98%;
+    --text-light: 210 40% 98%;
+    --text-muted: 215 20.2% 75.1%;
   }
 
   * {
@@ -54,5 +74,47 @@
 
   body {
     @apply font-sans antialiased bg-background text-foreground;
+  }
+  
+  /* Custom scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/30 rounded-full;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/50;
+  }
+  
+  /* Market status indicator */
+  .market-status-indicator {
+    @apply relative flex h-2 w-2;
+  }
+  
+  .market-status-indicator.open::before {
+    content: '';
+    @apply absolute inline-flex h-full w-full rounded-full bg-up opacity-75 animate-ping;
+  }
+  
+  .market-status-indicator.open::after {
+    content: '';
+    @apply relative inline-flex rounded-full h-2 w-2 bg-up;
+  }
+  
+  .market-status-indicator.closed::before {
+    content: '';
+    @apply absolute inline-flex h-full w-full rounded-full bg-muted-foreground opacity-75;
+  }
+  
+  .market-status-indicator.closed::after {
+    content: '';
+    @apply relative inline-flex rounded-full h-2 w-2 bg-muted-foreground;
   }
 }

@@ -42,16 +42,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
         interval = req.query.interval;
       }
       
+      // Calculate period1 based on the period parameter
+      const now = new Date();
+      let period1: Date;
+      
+      switch(period) {
+        case '1d':
+          period1 = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+          break;
+        case '5d':
+          period1 = new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000);
+          break;
+        case '1mo':
+          period1 = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+          break;
+        case '3mo':
+          period1 = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
+          break;
+        case '6mo':
+          period1 = new Date(now.getTime() - 180 * 24 * 60 * 60 * 1000);
+          break;
+        case '1y':
+          period1 = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
+          break;
+        case '5y':
+          period1 = new Date(now.getTime() - 5 * 365 * 24 * 60 * 60 * 1000);
+          break;
+        default:
+          period1 = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000); // Default to 1 month
+      }
+      
       const queryOptions = {
-        period1: period === "1d" ? "1d" : undefined,
-        period2: undefined,
+        period1,
         interval
       };
       
       const result = await yahooFinance.historical(symbol, queryOptions);
       
       // Convert Date objects to ISO strings for JSON serialization
-      const formattedResult = result.map(item => ({
+      const formattedResult = result.map((item: any) => ({
         ...item,
         date: item.date.toISOString()
       }));
@@ -224,13 +253,43 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { symbol } = req.params;
       const { period = "1mo" } = req.query;
       
+      // Calculate period1 based on the period parameter
+      const now = new Date();
+      let period1: Date;
+      
+      switch(period as string) {
+        case '1d':
+          period1 = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+          break;
+        case '5d':
+          period1 = new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000);
+          break;
+        case '1mo':
+          period1 = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+          break;
+        case '3mo':
+          period1 = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
+          break;
+        case '6mo':
+          period1 = new Date(now.getTime() - 180 * 24 * 60 * 60 * 1000);
+          break;
+        case '1y':
+          period1 = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
+          break;
+        case '5y':
+          period1 = new Date(now.getTime() - 5 * 365 * 24 * 60 * 60 * 1000);
+          break;
+        default:
+          period1 = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000); // Default to 1 month
+      }
+      
       // Get stock data
       const stockData = await yahooFinance.historical(symbol, {
-        period1: period as string
+        period1: period1
       });
       
       // Convert Date objects to ISO strings for CSV generation
-      const formattedData = stockData.map(item => ({
+      const formattedData = stockData.map((item: any) => ({
         ...item,
         date: item.date.toISOString().split('T')[0]  // Format as YYYY-MM-DD
       }));
