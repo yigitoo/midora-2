@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth } from "./auth";
 import { generateCsv } from "./csv-export";
+import { generateMockForumData } from "./mock-forum-data";
 import yahooFinance from "yahoo-finance2";
 import { ZodError } from "zod";
 import { 
@@ -657,6 +658,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   
   // Forum routes
+  
+  // Generate mock forum data - Admin only endpoint
+  app.post("/api/forum/generate-mock-data", async (req, res) => {
+    try {
+      if (!req.isAuthenticated()) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+      
+      // In a real app, you'd check if the user is an admin
+      // This is for development purposes only
+      const result = await generateMockForumData();
+      res.json(result);
+    } catch (error) {
+      console.error("Error generating mock forum data:", error);
+      res.status(500).json({ message: "Failed to generate mock forum data" });
+    }
+  });
+  
   app.get("/api/forum/categories", async (req, res) => {
     try {
       const categories = await storage.getForumCategories();
