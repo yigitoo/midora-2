@@ -52,6 +52,8 @@ const ForumCategorySchema = new mongoose.Schema({
   name: { type: String, required: true },
   description: String,
   order: { type: Number, default: 0 },
+  parentId: { type: Number, default: null }, // null means it's a top-level category
+  isSubcategory: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now }
 });
 
@@ -139,6 +141,8 @@ export const forumCategories = {
   name: "name",
   description: "description",
   order: "order",
+  parentId: "parentId",
+  isSubcategory: "isSubcategory",
   createdAt: "createdAt"
 };
 
@@ -200,7 +204,9 @@ export const insertSearchHistorySchema = z.object({
 export const insertForumCategorySchema = z.object({
   name: z.string().min(1),
   description: z.string().optional(),
-  order: z.number().default(0)
+  order: z.number().default(0),
+  parentId: z.number().nullable().optional(),
+  isSubcategory: z.boolean().default(false)
 });
 
 export const insertForumTopicSchema = z.object({
@@ -271,6 +277,8 @@ export type ForumCategory = {
   name: string;
   description?: string;
   order: number;
+  parentId?: number | null;
+  isSubcategory?: boolean;
   createdAt: Date;
 };
 

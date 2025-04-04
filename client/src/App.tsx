@@ -15,6 +15,7 @@ import StockDetailPage from "@/pages/stock-detail-page";
 import ForumCategoriesPage from "./pages/forum/categories-page";
 import ForumTopicsPage from "./pages/forum/topics-page";
 import ForumTopicPage from "./pages/forum/topic-page";
+import EnhancedForumCategoriesPage from "./pages/forum/enhanced-categories-page";
 import { AuthProvider } from "@/hooks/use-auth";
 import { ThemeProvider } from "@/hooks/use-theme";
 import { ProtectedRoute } from "@/lib/protected-route";
@@ -29,7 +30,7 @@ function Router() {
       <ProtectedRoute path="/market" component={MarketPage} />
       <ProtectedRoute path="/news" component={NewsPage} />
       <ProtectedRoute path="/stocks/:symbol" component={StockDetailPage} />
-      <ProtectedRoute path="/forum" component={ForumCategoriesPage} />
+      <ProtectedRoute path="/forum" component={EnhancedForumCategoriesPage} />
       <ProtectedRoute path="/forum/category/:id" component={ForumTopicsPage} />
       <ProtectedRoute path="/forum/topic/:id" component={ForumTopicPage} />
       <Route path="/auth" component={AuthPage} />

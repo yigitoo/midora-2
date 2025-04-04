@@ -10,8 +10,10 @@ import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import AnimatedStockChart from "@/components/stock/animated-stock-chart";
 import AdvancedIndicators from "@/components/stock/advanced-indicators";
+import EnhancedStockChart from "@/components/stock/enhanced-stock-chart";
+import EnhancedCompanyOverview from "@/components/stock/enhanced-company-overview";
 import NewsFeed from "@/components/news/news-feed";
-import { ArrowLeft, Bookmark, PlusCircle, LineChart, Eye, Download, Clock, TrendingUp, TrendingDown } from "lucide-react";
+import { ArrowLeft, Bookmark, PlusCircle, LineChart, Eye, Download, Clock, TrendingUp, TrendingDown, Info } from "lucide-react";
 
 const StockDetailPage = () => {
   const [location, navigate] = useLocation();
@@ -251,47 +253,11 @@ const StockDetailPage = () => {
               </TabsList>
               
               <TabsContent value="overview">
-                <Card className="shadow-md">
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-lg">Company Overview</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-700 mb-4">
-                      {stockData?.longBusinessSummary || 
-                        `${stockData?.shortName || symbol} is a publicly traded company. For more information, please visit the company's website.`}
-                    </p>
-                    
-                    {stockData?.website && (
-                      <div className="mb-4">
-                        <h4 className="font-medium text-gray-700 mb-1">Website</h4>
-                        <a href={stockData.website} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                          {stockData.website}
-                        </a>
-                      </div>
-                    )}
-                    
-                    {stockData?.industry && (
-                      <div className="mb-4">
-                        <h4 className="font-medium text-gray-700 mb-1">Industry</h4>
-                        <p>{stockData.industry}</p>
-                      </div>
-                    )}
-                    
-                    {stockData?.sector && (
-                      <div className="mb-4">
-                        <h4 className="font-medium text-gray-700 mb-1">Sector</h4>
-                        <p>{stockData.sector}</p>
-                      </div>
-                    )}
-                    
-                    {stockData?.fullTimeEmployees && (
-                      <div className="mb-4">
-                        <h4 className="font-medium text-gray-700 mb-1">Employees</h4>
-                        <p>{stockData.fullTimeEmployees.toLocaleString()}</p>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
+                <EnhancedCompanyOverview 
+                  stockData={stockData} 
+                  symbol={symbol}
+                  historyData={historyData}
+                />
               </TabsContent>
               
               <TabsContent value="indicators">
