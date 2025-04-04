@@ -1,0 +1,234 @@
+ailed to load resource: the server responded with a status of 401 (Unauthorized)
+client:536 WebSocket connection to 'wss://b090836b-c9b2-48ce-a6ad-f124f4fef92c-00-3om5epytej2pz.riker.replit.dev/?token=AfOda5seZxhT' failed: 
+setupWebSocket @ client:536
+client:536 Uncaught (in promise) SyntaxError: Failed to construct 'WebSocket': The URL 'wss://localhost:undefined/?token=AfOda5seZxhT' is invalid.
+    at setupWebSocket (client:536:19)
+    at fallback (client:509:16)
+    at WebSocket.<anonymous> (client:555:7)
+use-stock-websocket.ts:52 Connecting to WebSocket at: wss://b090836b-c9b2-48ce-a6ad-f124f4fef92c-00-3om5epytej2pz.riker.replit.dev/ws
+watchlist.tsx:101 Uncaught TypeError: Cannot read properties of null (reading 'symbol')
+    at watchlist.tsx:101:61
+    at Array.map (<anonymous>)
+    at Watchlist (watchlist.tsx:90:37)
+    at renderWithHooks (chunk-WERSD76P.js?v=2ca9f7cc:11548:26)
+    at updateFunctionComponent (chunk-WERSD76P.js?v=2ca9f7cc:14582:28)
+    at beginWork (chunk-WERSD76P.js?v=2ca9f7cc:15924:22)
+    at HTMLUnknownElement.callCallback2 (chunk-WERSD76P.js?v=2ca9f7cc:3674:22)
+    at Object.invokeGuardedCallbackDev (chunk-WERSD76P.js?v=2ca9f7cc:3699:24)
+    at invokeGuardedCallback (chunk-WERSD76P.js?v=2ca9f7cc:3733:39)
+    at beginWork$1 (chunk-WERSD76P.js?v=2ca9f7cc:19765:15)
+(anonymous) @ watchlist.tsx:101
+Watchlist @ watchlist.tsx:90
+renderWithHooks @ chunk-WERSD76P.js?v=2ca9f7cc:11548
+updateFunctionComponent @ chunk-WERSD76P.js?v=2ca9f7cc:14582
+beginWork @ chunk-WERSD76P.js?v=2ca9f7cc:15924
+callCallback2 @ chunk-WERSD76P.js?v=2ca9f7cc:3674
+invokeGuardedCallbackDev @ chunk-WERSD76P.js?v=2ca9f7cc:3699
+invokeGuardedCallback @ chunk-WERSD76P.js?v=2ca9f7cc:3733
+beginWork$1 @ chunk-WERSD76P.js?v=2ca9f7cc:19765
+performUnitOfWork @ chunk-WERSD76P.js?v=2ca9f7cc:19198
+workLoopSync @ chunk-WERSD76P.js?v=2ca9f7cc:19137
+renderRootSync @ chunk-WERSD76P.js?v=2ca9f7cc:19116
+performSyncWorkOnRoot @ chunk-WERSD76P.js?v=2ca9f7cc:18874
+flushSyncCallbacks @ chunk-WERSD76P.js?v=2ca9f7cc:9119
+(anonymous) @ chunk-WERSD76P.js?v=2ca9f7cc:18627
+setTimeout
+scheduleFn @ @tanstack_react-query.js?v=2ca9f7cc:555
+flush @ @tanstack_react-query.js?v=2ca9f7cc:569
+batch @ @tanstack_react-query.js?v=2ca9f7cc:587
+dispatch_fn @ @tanstack_react-query.js?v=2ca9f7cc:996
+setData @ @tanstack_react-query.js?v=2ca9f7cc:696
+onSuccess @ @tanstack_react-query.js?v=2ca9f7cc:897
+resolve @ @tanstack_react-query.js?v=2ca9f7cc:456
+Promise.then
+run @ @tanstack_react-query.js?v=2ca9f7cc:498
+start @ @tanstack_react-query.js?v=2ca9f7cc:536
+fetch @ @tanstack_react-query.js?v=2ca9f7cc:926
+executeFetch_fn @ @tanstack_react-query.js?v=2ca9f7cc:2211
+onSubscribe @ @tanstack_react-query.js?v=2ca9f7cc:1898
+subscribe @ @tanstack_react-query.js?v=2ca9f7cc:24
+(anonymous) @ @tanstack_react-query.js?v=2ca9f7cc:3022
+subscribeToStore @ chunk-WERSD76P.js?v=2ca9f7cc:11984
+commitHookEffectListMount @ chunk-WERSD76P.js?v=2ca9f7cc:16915
+commitPassiveMountOnFiber @ chunk-WERSD76P.js?v=2ca9f7cc:18156
+commitPassiveMountEffects_complete @ chunk-WERSD76P.js?v=2ca9f7cc:18129
+commitPassiveMountEffects_begin @ chunk-WERSD76P.js?v=2ca9f7cc:18119
+commitPassiveMountEffects @ chunk-WERSD76P.js?v=2ca9f7cc:18109
+flushPassiveEffectsImpl @ chunk-WERSD76P.js?v=2ca9f7cc:19490
+flushPassiveEffects @ chunk-WERSD76P.js?v=2ca9f7cc:19447
+commitRootImpl @ chunk-WERSD76P.js?v=2ca9f7cc:19416
+commitRoot @ chunk-WERSD76P.js?v=2ca9f7cc:19277
+performSyncWorkOnRoot @ chunk-WERSD76P.js?v=2ca9f7cc:18895
+flushSyncCallbacks @ chunk-WERSD76P.js?v=2ca9f7cc:9119
+(anonymous) @ chunk-WERSD76P.js?v=2ca9f7cc:18627
+watchlist.tsx:101 Uncaught TypeError: Cannot read properties of null (reading 'symbol')
+    at watchlist.tsx:101:61
+    at Array.map (<anonymous>)
+    at Watchlist (watchlist.tsx:90:37)
+    at renderWithHooks (chunk-WERSD76P.js?v=2ca9f7cc:11548:26)
+    at updateFunctionComponent (chunk-WERSD76P.js?v=2ca9f7cc:14582:28)
+    at beginWork (chunk-WERSD76P.js?v=2ca9f7cc:15924:22)
+    at HTMLUnknownElement.callCallback2 (chunk-WERSD76P.js?v=2ca9f7cc:3674:22)
+    at Object.invokeGuardedCallbackDev (chunk-WERSD76P.js?v=2ca9f7cc:3699:24)
+    at invokeGuardedCallback (chunk-WERSD76P.js?v=2ca9f7cc:3733:39)
+    at beginWork$1 (chunk-WERSD76P.js?v=2ca9f7cc:19765:15)
+(anonymous) @ watchlist.tsx:101
+Watchlist @ watchlist.tsx:90
+renderWithHooks @ chunk-WERSD76P.js?v=2ca9f7cc:11548
+updateFunctionComponent @ chunk-WERSD76P.js?v=2ca9f7cc:14582
+beginWork @ chunk-WERSD76P.js?v=2ca9f7cc:15924
+callCallback2 @ chunk-WERSD76P.js?v=2ca9f7cc:3674
+invokeGuardedCallbackDev @ chunk-WERSD76P.js?v=2ca9f7cc:3699
+invokeGuardedCallback @ chunk-WERSD76P.js?v=2ca9f7cc:3733
+beginWork$1 @ chunk-WERSD76P.js?v=2ca9f7cc:19765
+performUnitOfWork @ chunk-WERSD76P.js?v=2ca9f7cc:19198
+workLoopSync @ chunk-WERSD76P.js?v=2ca9f7cc:19137
+renderRootSync @ chunk-WERSD76P.js?v=2ca9f7cc:19116
+recoverFromConcurrentError @ chunk-WERSD76P.js?v=2ca9f7cc:18736
+performSyncWorkOnRoot @ chunk-WERSD76P.js?v=2ca9f7cc:18879
+flushSyncCallbacks @ chunk-WERSD76P.js?v=2ca9f7cc:9119
+(anonymous) @ chunk-WERSD76P.js?v=2ca9f7cc:18627
+setTimeout
+scheduleFn @ @tanstack_react-query.js?v=2ca9f7cc:555
+flush @ @tanstack_react-query.js?v=2ca9f7cc:569
+batch @ @tanstack_react-query.js?v=2ca9f7cc:587
+dispatch_fn @ @tanstack_react-query.js?v=2ca9f7cc:996
+setData @ @tanstack_react-query.js?v=2ca9f7cc:696
+onSuccess @ @tanstack_react-query.js?v=2ca9f7cc:897
+resolve @ @tanstack_react-query.js?v=2ca9f7cc:456
+Promise.then
+run @ @tanstack_react-query.js?v=2ca9f7cc:498
+start @ @tanstack_react-query.js?v=2ca9f7cc:536
+fetch @ @tanstack_react-query.js?v=2ca9f7cc:926
+executeFetch_fn @ @tanstack_react-query.js?v=2ca9f7cc:2211
+onSubscribe @ @tanstack_react-query.js?v=2ca9f7cc:1898
+subscribe @ @tanstack_react-query.js?v=2ca9f7cc:24
+(anonymous) @ @tanstack_react-query.js?v=2ca9f7cc:3022
+subscribeToStore @ chunk-WERSD76P.js?v=2ca9f7cc:11984
+commitHookEffectListMount @ chunk-WERSD76P.js?v=2ca9f7cc:16915
+commitPassiveMountOnFiber @ chunk-WERSD76P.js?v=2ca9f7cc:18156
+commitPassiveMountEffects_complete @ chunk-WERSD76P.js?v=2ca9f7cc:18129
+commitPassiveMountEffects_begin @ chunk-WERSD76P.js?v=2ca9f7cc:18119
+commitPassiveMountEffects @ chunk-WERSD76P.js?v=2ca9f7cc:18109
+flushPassiveEffectsImpl @ chunk-WERSD76P.js?v=2ca9f7cc:19490
+flushPassiveEffects @ chunk-WERSD76P.js?v=2ca9f7cc:19447
+commitRootImpl @ chunk-WERSD76P.js?v=2ca9f7cc:19416
+commitRoot @ chunk-WERSD76P.js?v=2ca9f7cc:19277
+performSyncWorkOnRoot @ chunk-WERSD76P.js?v=2ca9f7cc:18895
+flushSyncCallbacks @ chunk-WERSD76P.js?v=2ca9f7cc:9119
+(anonymous) @ chunk-WERSD76P.js?v=2ca9f7cc:18627
+chunk-WERSD76P.js?v=2ca9f7cc:14032 The above error occurred in the <Watchlist> component:
+
+    at Watchlist (https://b090836b-c9b2-48ce-a6ad-f124f4fef92c-00-3om5epytej2pz.riker.replit.dev/src/components/dashboard/watchlist.tsx:25:22)
+    at div
+    at div
+    at main
+    at div
+    at Dashboard (https://b090836b-c9b2-48ce-a6ad-f124f4fef92c-00-3om5epytej2pz.riker.replit.dev/src/pages/dashboard.tsx:34:20)
+    at Route (https://b090836b-c9b2-48ce-a6ad-f124f4fef92c-00-3om5epytej2pz.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=2ca9f7cc:323:16)
+    at ProtectedRoute (https://b090836b-c9b2-48ce-a6ad-f124f4fef92c-00-3om5epytej2pz.riker.replit.dev/src/lib/protected-route.tsx:22:3)
+    at Switch (https://b090836b-c9b2-48ce-a6ad-f124f4fef92c-00-3om5epytej2pz.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=2ca9f7cc:379:17)
+    at Router
+    at ThemeProvider (https://b090836b-c9b2-48ce-a6ad-f124f4fef92c-00-3om5epytej2pz.riker.replit.dev/src/hooks/use-theme.tsx:23:33)
+    at AuthProvider (https://b090836b-c9b2-48ce-a6ad-f124f4fef92c-00-3om5epytej2pz.riker.replit.dev/src/hooks/use-auth.tsx:27:32)
+    at QueryClientProvider (https://b090836b-c9b2-48ce-a6ad-f124f4fef92c-00-3om5epytej2pz.riker.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=2ca9f7cc:2805:3)
+    at App
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries.
+logCapturedError @ chunk-WERSD76P.js?v=2ca9f7cc:14032
+update.callback @ chunk-WERSD76P.js?v=2ca9f7cc:14052
+callCallback @ chunk-WERSD76P.js?v=2ca9f7cc:11248
+commitUpdateQueue @ chunk-WERSD76P.js?v=2ca9f7cc:11265
+commitLayoutEffectOnFiber @ chunk-WERSD76P.js?v=2ca9f7cc:17093
+commitLayoutMountEffects_complete @ chunk-WERSD76P.js?v=2ca9f7cc:17980
+commitLayoutEffects_begin @ chunk-WERSD76P.js?v=2ca9f7cc:17969
+commitLayoutEffects @ chunk-WERSD76P.js?v=2ca9f7cc:17920
+commitRootImpl @ chunk-WERSD76P.js?v=2ca9f7cc:19353
+commitRoot @ chunk-WERSD76P.js?v=2ca9f7cc:19277
+performSyncWorkOnRoot @ chunk-WERSD76P.js?v=2ca9f7cc:18895
+flushSyncCallbacks @ chunk-WERSD76P.js?v=2ca9f7cc:9119
+(anonymous) @ chunk-WERSD76P.js?v=2ca9f7cc:18627
+setTimeout
+scheduleFn @ @tanstack_react-query.js?v=2ca9f7cc:555
+flush @ @tanstack_react-query.js?v=2ca9f7cc:569
+batch @ @tanstack_react-query.js?v=2ca9f7cc:587
+dispatch_fn @ @tanstack_react-query.js?v=2ca9f7cc:996
+setData @ @tanstack_react-query.js?v=2ca9f7cc:696
+onSuccess @ @tanstack_react-query.js?v=2ca9f7cc:897
+resolve @ @tanstack_react-query.js?v=2ca9f7cc:456
+Promise.then
+run @ @tanstack_react-query.js?v=2ca9f7cc:498
+start @ @tanstack_react-query.js?v=2ca9f7cc:536
+fetch @ @tanstack_react-query.js?v=2ca9f7cc:926
+executeFetch_fn @ @tanstack_react-query.js?v=2ca9f7cc:2211
+onSubscribe @ @tanstack_react-query.js?v=2ca9f7cc:1898
+subscribe @ @tanstack_react-query.js?v=2ca9f7cc:24
+(anonymous) @ @tanstack_react-query.js?v=2ca9f7cc:3022
+subscribeToStore @ chunk-WERSD76P.js?v=2ca9f7cc:11984
+commitHookEffectListMount @ chunk-WERSD76P.js?v=2ca9f7cc:16915
+commitPassiveMountOnFiber @ chunk-WERSD76P.js?v=2ca9f7cc:18156
+commitPassiveMountEffects_complete @ chunk-WERSD76P.js?v=2ca9f7cc:18129
+commitPassiveMountEffects_begin @ chunk-WERSD76P.js?v=2ca9f7cc:18119
+commitPassiveMountEffects @ chunk-WERSD76P.js?v=2ca9f7cc:18109
+flushPassiveEffectsImpl @ chunk-WERSD76P.js?v=2ca9f7cc:19490
+flushPassiveEffects @ chunk-WERSD76P.js?v=2ca9f7cc:19447
+commitRootImpl @ chunk-WERSD76P.js?v=2ca9f7cc:19416
+commitRoot @ chunk-WERSD76P.js?v=2ca9f7cc:19277
+performSyncWorkOnRoot @ chunk-WERSD76P.js?v=2ca9f7cc:18895
+flushSyncCallbacks @ chunk-WERSD76P.js?v=2ca9f7cc:9119
+(anonymous) @ chunk-WERSD76P.js?v=2ca9f7cc:18627
+chunk-WERSD76P.js?v=2ca9f7cc:9129 Uncaught TypeError: Cannot read properties of null (reading 'symbol')
+    at watchlist.tsx:101:61
+    at Array.map (<anonymous>)
+    at Watchlist (watchlist.tsx:90:37)
+    at renderWithHooks (chunk-WERSD76P.js?v=2ca9f7cc:11548:26)
+    at updateFunctionComponent (chunk-WERSD76P.js?v=2ca9f7cc:14582:28)
+    at beginWork (chunk-WERSD76P.js?v=2ca9f7cc:15924:22)
+    at beginWork$1 (chunk-WERSD76P.js?v=2ca9f7cc:19753:22)
+    at performUnitOfWork (chunk-WERSD76P.js?v=2ca9f7cc:19198:20)
+    at workLoopSync (chunk-WERSD76P.js?v=2ca9f7cc:19137:13)
+    at renderRootSync (chunk-WERSD76P.js?v=2ca9f7cc:19116:15)
+(anonymous) @ watchlist.tsx:101
+Watchlist @ watchlist.tsx:90
+renderWithHooks @ chunk-WERSD76P.js?v=2ca9f7cc:11548
+updateFunctionComponent @ chunk-WERSD76P.js?v=2ca9f7cc:14582
+beginWork @ chunk-WERSD76P.js?v=2ca9f7cc:15924
+beginWork$1 @ chunk-WERSD76P.js?v=2ca9f7cc:19753
+performUnitOfWork @ chunk-WERSD76P.js?v=2ca9f7cc:19198
+workLoopSync @ chunk-WERSD76P.js?v=2ca9f7cc:19137
+renderRootSync @ chunk-WERSD76P.js?v=2ca9f7cc:19116
+recoverFromConcurrentError @ chunk-WERSD76P.js?v=2ca9f7cc:18736
+performSyncWorkOnRoot @ chunk-WERSD76P.js?v=2ca9f7cc:18879
+flushSyncCallbacks @ chunk-WERSD76P.js?v=2ca9f7cc:9119
+(anonymous) @ chunk-WERSD76P.js?v=2ca9f7cc:18627
+setTimeout
+scheduleFn @ @tanstack_react-query.js?v=2ca9f7cc:555
+flush @ @tanstack_react-query.js?v=2ca9f7cc:569
+batch @ @tanstack_react-query.js?v=2ca9f7cc:587
+dispatch_fn @ @tanstack_react-query.js?v=2ca9f7cc:996
+setData @ @tanstack_react-query.js?v=2ca9f7cc:696
+onSuccess @ @tanstack_react-query.js?v=2ca9f7cc:897
+resolve @ @tanstack_react-query.js?v=2ca9f7cc:456
+Promise.then
+run @ @tanstack_react-query.js?v=2ca9f7cc:498
+start @ @tanstack_react-query.js?v=2ca9f7cc:536
+fetch @ @tanstack_react-query.js?v=2ca9f7cc:926
+executeFetch_fn @ @tanstack_react-query.js?v=2ca9f7cc:2211
+onSubscribe @ @tanstack_react-query.js?v=2ca9f7cc:1898
+subscribe @ @tanstack_react-query.js?v=2ca9f7cc:24
+(anonymous) @ @tanstack_react-query.js?v=2ca9f7cc:3022
+subscribeToStore @ chunk-WERSD76P.js?v=2ca9f7cc:11984
+commitHookEffectListMount @ chunk-WERSD76P.js?v=2ca9f7cc:16915
+commitPassiveMountOnFiber @ chunk-WERSD76P.js?v=2ca9f7cc:18156
+commitPassiveMountEffects_complete @ chunk-WERSD76P.js?v=2ca9f7cc:18129
+commitPassiveMountEffects_begin @ chunk-WERSD76P.js?v=2ca9f7cc:18119
+commitPassiveMountEffects @ chunk-WERSD76P.js?v=2ca9f7cc:18109
+flushPassiveEffectsImpl @ chunk-WERSD76P.js?v=2ca9f7cc:19490
+flushPassiveEffects @ chunk-WERSD76P.js?v=2ca9f7cc:19447
+commitRootImpl @ chunk-WERSD76P.js?v=2ca9f7cc:19416
+commitRoot @ chunk-WERSD76P.js?v=2ca9f7cc:19277
+performSyncWorkOnRoot @ chunk-WERSD76P.js?v=2ca9f7cc:18895
+flushSyncCallbacks @ chunk-WERSD76P.js?v=2ca9f7cc:9119
+(anonymous) @ chunk-WERSD76P.js?v=2ca9f7cc:18627
+use-stock-websocket.ts:56 WebSocket connection established

@@ -88,8 +88,13 @@ const Watchlist = ({ watchlistId = 1, onSelectStock }: WatchlistProps) => {
                 ))
               ) : watchlist && watchlist.stockData && watchlist.stockData.length > 0 ? (
                 watchlist.stockData.map((stock, index) => {
+                  // Skip rendering if stock is null or symbol is missing
+                  if (!stock || !stock.symbol) {
+                    return null;
+                  }
+                  
                   // Add null check to prevent error
-                  const isPositive = stock && stock.regularMarketChangePercent ? stock.regularMarketChangePercent > 0 : false;
+                  const isPositive = stock.regularMarketChangePercent ? stock.regularMarketChangePercent > 0 : false;
                   return (
                     <tr 
                       key={index} 
@@ -99,7 +104,7 @@ const Watchlist = ({ watchlistId = 1, onSelectStock }: WatchlistProps) => {
                       <td className="py-3 px-3">
                         <div>
                           <p className="font-medium">{stock.symbol}</p>
-                          <p className="text-gray-500 text-xs">{stock.shortName || stock.longName}</p>
+                          <p className="text-gray-500 text-xs">{stock.shortName || stock.longName || 'Unknown'}</p>
                         </div>
                       </td>
                       <td className="py-3 px-3 font-medium">{formatNumber(stock.regularMarketPrice || 0)}</td>
@@ -119,7 +124,10 @@ const Watchlist = ({ watchlistId = 1, onSelectStock }: WatchlistProps) => {
                           className="h-8 w-8 p-0" 
                           onClick={(e) => {
                             e.stopPropagation();
-                            handleRemove(stock.symbol);
+                            // Ensure symbol is not null before calling handleRemove
+                            if (stock && stock.symbol) {
+                              handleRemove(stock.symbol);
+                            }
                           }}
                         >
                           <i className="ri-close-line text-gray-500"></i>
