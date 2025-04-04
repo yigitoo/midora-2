@@ -45,8 +45,11 @@ export function useStockWebSocket(symbols: string[]) {
     // Create WebSocket connection
     const setupWebSocket = () => {
       try {
+        // Fix WebSocket URL construction to avoid 'localhost:undefined' error
         const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-        const wsUrl = `${protocol}//${window.location.host}/ws`;
+        const host = window.location.host;
+        const wsUrl = `${protocol}//${host}/ws`;
+        console.log(`Connecting to WebSocket at: ${wsUrl}`);
         const socket = new WebSocket(wsUrl);
         
         socket.onopen = () => {
