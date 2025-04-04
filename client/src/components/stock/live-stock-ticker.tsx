@@ -30,6 +30,9 @@ export function LiveStockTicker({
   useEffect(() => {
     if (!quotes) return;
     
+    const newPriceChanges: Record<string, 'up' | 'down' | 'none'> = {};
+    const newPreviousPrices: Record<string, number> = { ...previousPrices };
+    
     Object.entries(quotes).forEach(([symbol, quote]) => {
       if (!quote || !quote.regularMarketPrice) return;
       
@@ -38,19 +41,28 @@ export function LiveStockTicker({
       
       if (prevPrice && currentPrice && prevPrice !== currentPrice && showAnimation) {
         const changeDirection = currentPrice > prevPrice ? 'up' : 'down';
-        setPriceChanges(prev => ({ ...prev, [symbol]: changeDirection }));
+        newPriceChanges[symbol] = changeDirection;
         
-        // Reset animation after 1 second
+        // Schedule reset animation after 1 second
         setTimeout(() => {
           setPriceChanges(prev => ({ ...prev, [symbol]: 'none' }));
         }, 1000);
       }
       
       if (currentPrice) {
-        setPreviousPrices(prev => ({ ...prev, [symbol]: currentPrice }));
+        newPreviousPrices[symbol] = currentPrice;
       }
     });
-  }, [quotes, previousPrices, showAnimation]);
+    
+    // Batch update state changes to prevent infinite loops
+    if (Object.keys(newPriceChanges).length > 0) {
+      setPriceChanges(prev => ({ ...prev, ...newPriceChanges }));
+    }
+    
+    setPreviousPrices(newPreviousPrices);
+    
+    // Remove previousPrices from dependencies to prevent infinite loop
+  }, [quotes, showAnimation]);
   
   // Sort stocks by percentage change
   const sortedStocks = quotes ? Object.values(quotes)

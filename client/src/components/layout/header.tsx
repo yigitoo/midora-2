@@ -45,7 +45,8 @@ const Header = () => {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (isMenuOpen && event.target instanceof Node && !event.target.closest('.mobile-menu')) {
+      const target = event.target as Element;
+      if (isMenuOpen && !target.closest('.mobile-menu')) {
         setIsMenuOpen(false);
       }
     };
@@ -67,7 +68,7 @@ const Header = () => {
           <div className="flex items-center space-x-4">
             <Link href="/" className="flex items-center">
               <i className="ri-line-chart-fill text-3xl text-primary"></i>
-              <span className="ml-2 text-xl font-semibold">FinAnalytics</span>
+              <span className="ml-2 text-xl font-semibold">Midora</span>
             </Link>
             
             {/* Desktop Navigation */}

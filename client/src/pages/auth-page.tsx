@@ -37,16 +37,16 @@ type ForgotPasswordValues = z.infer<typeof forgotPasswordSchema>;
 
 const AuthPage = () => {
   const [authView, setAuthView] = useState<"login" | "register" | "forgot">("login");
-  const [location] = useLocation();
+  const [location, navigate] = useLocation();
   const { toast } = useToast();
   const { user, loginMutation, registerMutation } = useAuth();
   
   // Redirect if already logged in
   useEffect(() => {
     if (user) {
-      location('/');
+      navigate('/');
     }
-  }, [user, location]);
+  }, [user, navigate]);
   
   // Login form
   const loginForm = useForm<LoginValues>({
@@ -110,7 +110,7 @@ const AuthPage = () => {
           <div className="flex items-center justify-center">
             <i className="ri-line-chart-fill text-5xl text-primary"></i>
           </div>
-          <h2 className="text-2xl font-semibold mt-2">FinAnalytics</h2>
+          <h2 className="text-2xl font-semibold mt-2">Midora</h2>
           <p className="text-gray-500">Advanced Stock Market Analysis</p>
         </div>
         

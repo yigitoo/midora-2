@@ -4,14 +4,14 @@
 
 @layer base {
   :root {
-    /* Light theme */
+    /* Light theme - Midora Theme */
     --background: 210 40% 98%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 211 100% 40%;
+    --primary: 220 91% 36%;
     --primary-foreground: 0 0% 100%;
     --secondary: 152 55% 46%;
     --secondary-foreground: 0 0% 100%;
@@ -23,13 +23,13 @@
     --destructive-foreground: 0 0% 100%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 211 100% 40%;
+    --ring: 220 91% 36%;
     --radius: 0.5rem;
     
-    /* Custom finance colors for light theme */
-    --up-color: 120 100% 28%;
+    /* Midora custom colors for light theme */
+    --up-color: 142 76% 36%;
     --down-color: 0 84% 60%;
-    --chart-line: 211 100% 40%;
+    --chart-line: 220 91% 36%;
     --hover-bg: 210 40% 96.1%;
     --text-dark: 222.2 84% 4.9%;
     --text-light: 210 40% 98%;
@@ -37,14 +37,14 @@
   }
 
   .dark {
-    /* Dark theme */
+    /* Dark theme - Midora Theme */
     --background: 222.2 47% 11%;
     --foreground: 210 40% 98%;
     --card: 222.2 47% 13%;
     --card-foreground: 210 40% 98%;
     --popover: 222.2 47% 13%;
     --popover-foreground: 210 40% 98%;
-    --primary: 211 100% 50%;
+    --primary: 220 91% 54%;
     --primary-foreground: 0 0% 100%;
     --secondary: 152 55% 50%;
     --secondary-foreground: 0 0% 100%;
@@ -56,15 +56,15 @@
     --destructive-foreground: 0 0% 100%;
     --border: 217.2 32.6% 20.5%;
     --input: 217.2 32.6% 20.5%;
-    --ring: 211 100% 50%;
+    --ring: 220 91% 54%;
     
-    /* Custom finance colors for dark theme */
-    --up-color: 120 100% 45%;
+    /* Midora custom colors for dark theme */
+    --up-color: 142 76% 45%;
     --down-color: 0 84% 65%;
-    --chart-line: 211 100% 65%;
+    --chart-line: 220 91% 65%;
     --hover-bg: 217.2 32.6% 22.5%;
     --text-dark: 210 40% 98%;
-    --text-light: 210 40% 98%;
+    --text-light: 220 91% 54%;
     --text-muted: 215 20.2% 75.1%;
   }
 
